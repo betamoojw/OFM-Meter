@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../Organization/knxprod-support/knx_project_20/knx-editor.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<KNX xmlns:op="http://github.com/OpenKNX/OpenKNXproducer" xmlns="http://knx.org/xml/project/20" CreatedBy="KNX MT" ToolVersion="5.1.255.16695">
+  <ManufacturerData>
+    <Manufacturer>
+      <ApplicationPrograms>
+        <ApplicationProgram>
+          <Static>
+            <ParameterTypes>
+              <ParameterType Id="%AID%_PT-ValueDpt7Min1" Name="ValueDpt7">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="1" maxInclusive="65535" />
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterLock" Name="MeterLock">
+                <TypeRestriction Base="Value" SizeInBit="2">
+                  <Enumeration Text="nicht aktiv" Value="0" Id="%ENID%" />
+                  <Enumeration Text="gesperrt (1) / nicht gesperrt (0)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="gesperrt (0) / nicht gesperrt (1)" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterMode" Name="MeterMode">
+                <TypeRestriction Base="Value" SizeInBit="4">
+                  <Enumeration Text="Deaktviert" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Standardzähler" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Impulsezähler" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Betriebsstundenzähler" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterDurationType" Name="MeterDurationType">
+                <TypeRestriction Base="Value" SizeInBit="4">
+                  <Enumeration Text="Betriebsdauer in Stunden (DPT 7.007)" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Betriebsdauer in Stunden (DPT 12.102)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Betriebsdauer in Minuten (DPT 12.101)" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Betriebsdauer in Sekunde (DPT 12.100)" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterType" Name="MeterType">
+                <TypeRestriction Base="Value" SizeInBit="4">
+                  <Enumeration Text="DPT 12.xxx (4-Byte-Wert)" Value="0" Id="%ENID%" />
+                  <Enumeration Text="DPT 13.xxx (4-Byte-Wert-Vorzeichen)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="DPT 14.xxx (4-Byte-Fließkomma)" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterModifier" Name="MeterModifier">
+                <TypeFloat Encoding="IEEE-754 Single" minInclusive="0.001" maxInclusive="1000" />
+              </ParameterType>
+            </ParameterTypes>
+            <Parameters>
+            </Parameters>
+            <ParameterRefs>
+            </ParameterRefs>
+            <ComObjectTable>
+            </ComObjectTable>
+            <ComObjectRefs>
+            </ComObjectRefs>
+          </Static>
+          <Dynamic>
+            <Channel Name="MainChannel" Text="Zähler" Number="%TT%" Id="%AID%_CH-%TT%" Icon="gauge">
+              <op:include href="MeterModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="MTR" IsInner="true" />
+            </Channel>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+      <Baggages>
+        <Baggage TargetPath="" Name="Help_de.zip" Id="%FILE-HELP-de%">
+          <FileInfo TimeInfo="%DATETIME%" />
+        </Baggage>
+        <Baggage TargetPath="" Name="Icons.zip" Id="%FILE-ICONS%">
+          <FileInfo TimeInfo="%DATETIME%" />
+        </Baggage>
+      </Baggages>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>
