@@ -139,6 +139,8 @@
                           <!-- bei Impuls -->
                           <when test="2">
                             <ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00105" />
+                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00303" />
+                            
                             <!-- je Einheit -->
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%016_R-%TT%%CC%01601" IndentLevel="1" />
                             <!-- Leistung -->

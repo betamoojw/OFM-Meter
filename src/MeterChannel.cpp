@@ -12,8 +12,7 @@ const std::string MeterChannel::name()
 
 void MeterChannel::setup()
 {
-    if (!ParamMTR_ChannelMode)
-        return;
+    if (!ParamMTR_ChannelMode) return;
 
     // KoBI_ChannelOutput.valueNoSend(false, DPT_Switch);
 
@@ -33,19 +32,25 @@ void MeterChannel::setup()
     logTraceP("ParamMTR_ChannelBackstop: %i", ParamMTR_ChannelBackstop);
 
     if (ParamMTR_ChannelPowerCalc)
+    {
         _powerCalculator = new MeterPowerCalculator(ParamMTR_ChannelInPulses);
+        _powerCalculator->setCallback([this](uint32_t power, uint32_t duration) { this->processPower(power, duration); });
+    }
 }
 
 void MeterChannel::loop()
 {
-    if (!ParamMTR_ChannelMode)
-        return;
+    if (!ParamMTR_ChannelMode) return;
+
+    if (ParamMTR_ChannelPowerCalc)
+    {
+        _powerCalculator->loop();
+    }
 }
 
 void MeterChannel::processInputKo(GroupObject &ko)
 {
-    if (!ParamMTR_ChannelMode)
-        return;
+    if (!ParamMTR_ChannelMode) return;
 
     switch (MTR_KoCalcIndex(ko.asap()))
     {
@@ -66,31 +71,17 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
             reference -= ParamMTR_ChannelInPulses;
             counter++;
         }
-        logDebugP("Impuls pulses %i counter %i", reference, counter);
-
+        // logTraceP("Impuls pulses %i counter %i", reference, counter);
         if (ParamMTR_ChannelPowerCalc)
         {
-            uint32_t power = 0;
-            if(_powerCalculator->calculate(power)) {
-                logDebugP("Power %i", power);
-            }
 
-
-            // if (powerTime > 0)
-            // {
-            //     if (delayCheck(powerTime, 1000))
-            //     {
-            //         float power = 0;
-            //         uint32_t diff = (millis() - powerTime);
-            //         power = 1.0 / (diff / (3600000.0 / ParamMTR_ChannelInPulses)) * powerCounter;
-            //         logDebugP("Power %f (%ims)", power, diff);
-            //         powerTime = millis();
-            //     }
-            // }
-            // else
-            // {
-            //     powerTime = millis();
-            // }
+            _powerCalculator->pulse();
         }
     }
+}
+
+void MeterChannel::processPower(uint32_t power, uint32_t duration)
+{
+    logDebugP("Power %i (%ims)", power, duration);
+    KoMTR_ChannelOptional.value(power, DPT_Value_Power);
 }
