@@ -31,9 +31,66 @@ void MeterChannel::setup()
     logTraceP("ParamMTR_ChannelIgnoreZero: %i", ParamMTR_ChannelIgnoreZero);
     logTraceP("ParamMTR_ChannelPowerCalc: %i", ParamMTR_ChannelPowerCalc);
     logTraceP("ParamMTR_ChannelBackstop: %i", ParamMTR_ChannelBackstop);
+
+    if (ParamMTR_ChannelPowerCalc)
+        _powerCalculator = new MeterPowerCalculator(ParamMTR_ChannelInPulses);
 }
+
 void MeterChannel::loop()
 {
     if (!ParamMTR_ChannelMode)
         return;
+}
+
+void MeterChannel::processInputKo(GroupObject &ko)
+{
+    if (!ParamMTR_ChannelMode)
+        return;
+
+    switch (MTR_KoCalcIndex(ko.asap()))
+    {
+        case MTR_KoChannelInput:
+            processInputKoInput(ko);
+            break;
+    }
+}
+
+void MeterChannel::processInputKoInput(GroupObject &ko)
+{
+    if (ParamMTR_ChannelMode == 2 && ko.value(DPT_Switch))
+    {
+        reference++;
+        referenceTime = millis();
+        if (reference >= ParamMTR_ChannelInPulses)
+        {
+            reference -= ParamMTR_ChannelInPulses;
+            counter++;
+        }
+        logDebugP("Impuls pulses %i counter %i", reference, counter);
+
+        if (ParamMTR_ChannelPowerCalc)
+        {
+            uint32_t power = 0;
+            if(_powerCalculator->calculate(power)) {
+                logDebugP("Power %i", power);
+            }
+
+
+            // if (powerTime > 0)
+            // {
+            //     if (delayCheck(powerTime, 1000))
+            //     {
+            //         float power = 0;
+            //         uint32_t diff = (millis() - powerTime);
+            //         power = 1.0 / (diff / (3600000.0 / ParamMTR_ChannelInPulses)) * powerCounter;
+            //         logDebugP("Power %f (%ims)", power, diff);
+            //         powerTime = millis();
+            //     }
+            // }
+            // else
+            // {
+            //     powerTime = millis();
+            // }
+        }
+    }
 }

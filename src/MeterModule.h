@@ -14,6 +14,7 @@ class MeterModule : public OpenKNX::Module
     void loop() override;
     const std::string name() override;
     const std::string version() override;
+    void processInputKo(GroupObject &ko) override;
 };
 
 extern MeterModule openknxMeterModule;
