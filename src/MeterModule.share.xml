@@ -52,6 +52,9 @@
             </ComObjectTable>
             <ComObjectRefs>
             </ComObjectRefs>
+            <Script>
+              <op:include href="Meter.script.js" prefix="MTR" type="script" />
+            </Script>  
           </Static>
           <Dynamic>
             <Channel Name="MainChannel" Text="Zähler" Number="%TT%" Id="%AID%_CH-%TT%" Icon="gauge">

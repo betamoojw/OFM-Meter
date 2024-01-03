@@ -20,6 +20,6 @@ class MeterChannel : public OpenKNX::Channel
     void setup() override;
     void loop() override;
     void processInputKo(GroupObject &ko) override;
-    void processPower(uint32_t power, uint32_t duration);
+    void processPowerCalculation(uint32_t power, uint32_t duration, uint32_t pulses);
     const std::string name() override;
 };

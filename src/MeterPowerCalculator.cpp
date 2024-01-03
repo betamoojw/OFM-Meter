@@ -1,6 +1,6 @@
 #include "MeterPowerCalculator.h"
 
-#define WAIT_TIME 1000
+#define WAIT_TIME 5000
 #define ABORT_TIME 60000
 
 void MeterPowerCalculator::pulse()
@@ -14,7 +14,7 @@ void MeterPowerCalculator::pulse()
     _pulses++;
     _lastPulseTime = millis();
 
-    if (delayCheck(_time, WAIT_TIME))
+    if (delayCheck(_time, _waitTime * 1000))
     {
         calculate();
     }
@@ -23,35 +23,19 @@ void MeterPowerCalculator::pulse()
 void MeterPowerCalculator::loop()
 {
     // Wait time for to fast trigger
-    if (_pulses > 0 && delayCheck(_time, WAIT_TIME))
-    {
-        calculate();
-    }
+    if (_pulses > 0 && delayCheck(_time, _waitTime * 1000)) calculate();
 
     // Abort
-    if (_power > 0 && _time > 0 && delayCheck(_time, ABORT_TIME))
-    {
-        _power = 0;
-        _time = _lastPulseTime;
-        _pulses = 0;
-        _callback(_power, 0);
-    }
-
-    if (delayCheck(_test, 30))
-    {
-        // pulse();
-        _test = millis();
-    }
+    if (_power > 0 && _time > 0 && delayCheck(_time, _abortTime * 60000)) calculate();
 }
 
 void MeterPowerCalculator::calculate()
 {
     const uint32_t duration = _lastPulseTime - _time;
-    _power = round(1.0 / ((double)duration / (3600000.0 / _reference * _pulses)));
+    _power = ceil(1.0 / ((double)duration / (3600000.0 / _reference * _pulses)) * _modifier);
 
-    _callback(_power, duration);
+    _callback(_power, duration, _pulses);
 
-    _time = millis();
-    //_lastPulseTime = 0;
+    _time = _lastPulseTime;
     _pulses = 0;
 }

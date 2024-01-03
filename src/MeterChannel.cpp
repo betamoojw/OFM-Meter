@@ -17,24 +17,27 @@ void MeterChannel::setup()
     // KoBI_ChannelOutput.valueNoSend(false, DPT_Switch);
 
     // Debug
-    logTraceP("ParamMTR_ChannelMode: %i", ParamMTR_ChannelMode);
-    logTraceP("ParamMTR_ChannelLock: %i", ParamMTR_ChannelLock);
-    logTraceP("ParamMTR_ChannelInModifier: %f", ParamMTR_ChannelInModifier);
-    logTraceP("ParamMTR_ChannelOutModifier: %f", ParamMTR_ChannelOutModifier);
-    logTraceP("ParamMTR_ChannelInType: %i", ParamMTR_ChannelInType);
-    logTraceP("ParamMTR_ChannelOutType: %i", ParamMTR_ChannelOutType);
-    logTraceP("ParamMTR_ChannelDurationType: %i", ParamMTR_ChannelDurationType);
-    logTraceP("ParamMTR_ChannelInFallback: %i", ParamMTR_ChannelInFallback);
-    logTraceP("ParamMTR_ChannelInPulses: %i", ParamMTR_ChannelInPulses);
-    logTraceP("ParamMTR_ChannelInDistance: %i", ParamMTR_ChannelInDistance);
-    logTraceP("ParamMTR_ChannelIgnoreZero: %i", ParamMTR_ChannelIgnoreZero);
-    logTraceP("ParamMTR_ChannelPowerCalc: %i", ParamMTR_ChannelPowerCalc);
-    logTraceP("ParamMTR_ChannelBackstop: %i", ParamMTR_ChannelBackstop);
+    logTraceP("ChannelMode: %i", ParamMTR_ChannelMode);
+    logTraceP("ChannelLock: %i", ParamMTR_ChannelLock);
+    logTraceP("ChannelInModifier: %f", ParamMTR_ChannelInModifier);
+    logTraceP("ChannelOutModifier: %f", ParamMTR_ChannelOutModifier);
+    logTraceP("ChannelPowerModifier: %f", ParamMTR_ChannelPowerModifier);
+    logTraceP("ChannelInType: %i", ParamMTR_ChannelInType);
+    logTraceP("ChannelOutType: %i", ParamMTR_ChannelOutType);
+    logTraceP("ChannelDurationType: %i", ParamMTR_ChannelDurationType);
+    logTraceP("ChannelInFallback: %i", ParamMTR_ChannelInFallback);
+    logTraceP("ChannelInPulses: %i", ParamMTR_ChannelInPulses);
+    logTraceP("ChannelInDistance: %i", ParamMTR_ChannelInDistance);
+    logTraceP("ChannelIgnoreZero: %i", ParamMTR_ChannelIgnoreZero);
+    logTraceP("ChannelPowerCalc: %i", ParamMTR_ChannelPowerCalc);
+    logTraceP("ChannelBackstop: %i", ParamMTR_ChannelBackstop);
+    logTraceP("ChannelPowerWaitTime: %i", ParamMTR_ChannelPowerWaitTime);
+    logTraceP("ChannelPowerAbortTime: %i", ParamMTR_ChannelPowerAbortTime);
 
     if (ParamMTR_ChannelPowerCalc)
     {
-        _powerCalculator = new MeterPowerCalculator(ParamMTR_ChannelInPulses);
-        _powerCalculator->setCallback([this](uint32_t power, uint32_t duration) { this->processPower(power, duration); });
+        _powerCalculator = new MeterPowerCalculator(ParamMTR_ChannelInPulses, ParamMTR_ChannelPowerModifier, ParamMTR_ChannelPowerWaitTime, ParamMTR_ChannelPowerAbortTime);
+        _powerCalculator->setCallback([this](uint32_t power, uint32_t duration, uint32_t pulses) { this->processPowerCalculation(power, duration, pulses); });
     }
 }
 
@@ -80,8 +83,8 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
     }
 }
 
-void MeterChannel::processPower(uint32_t power, uint32_t duration)
+void MeterChannel::processPowerCalculation(uint32_t power, uint32_t duration, uint32_t pulses)
 {
-    logDebugP("Power %i (%ims)", power, duration);
+    logDebugP("Power %i (%ims with %i pulses)", power, duration, pulses);
     KoMTR_ChannelOptional.value(power, DPT_Value_Power);
 }
