@@ -1,6 +1,6 @@
 #pragma once
 #include "OpenKNX.h"
-#include "MeterPowerCalculator.h"
+#include "MeterCalculator.h"
 
 class MeterChannel : public OpenKNX::Channel
 {
@@ -11,7 +11,7 @@ class MeterChannel : public OpenKNX::Channel
     uint32_t referenceTime = 0;
     uint32_t powerTime = 0;
     uint16_t powerCounter = 0;
-    MeterPowerCalculator *_powerCalculator = nullptr;
+    MeterCalculator *_calculator = nullptr;
     void processInputKoInput(GroupObject &ko);
 
   public:
@@ -20,6 +20,6 @@ class MeterChannel : public OpenKNX::Channel
     void setup() override;
     void loop() override;
     void processInputKo(GroupObject &ko) override;
-    void processPowerCalculation(uint32_t power, uint32_t duration, uint32_t pulses);
+    void processCalculation(uint32_t value, uint32_t duration, uint32_t pulses);
     const std::string name() override;
 };

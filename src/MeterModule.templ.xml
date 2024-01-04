@@ -12,9 +12,9 @@
               <Parameter Id="%AID%_P-%TT%%CC%020" Name="Channel%C%OutUnit" ParameterType="%AID%_PT-Text40Byte" Text="Einheit" Value="" />
               <Union SizeInBit="96">
                 <Memory CodeSegment="%MID%" Offset="0" BitOffset="0" />
-                <Parameter Id="%AID%_UP-%TT%%CC%110" Offset="0"  BitOffset="0" Name="Channel%C%InModifier"    ParameterType="%AID%_PT-MeterModifier" Text="Multiplikator" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%210" Offset="8"  BitOffset="0" Name="Channel%C%OutModifier"   ParameterType="%AID%_PT-MeterModifier" Text="Multiplikator" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%310" Offset="16" BitOffset="0" Name="Channel%C%PowerModifier" ParameterType="%AID%_PT-MeterModifier" Text="Multiplikator" Value="1" />
+                <Parameter Id="%AID%_UP-%TT%%CC%110" Offset="0" BitOffset="0" Name="Channel%C%InModifier"   ParameterType="%AID%_PT-ValueDpt14" Text="Multiplikator" Value="1" />
+                <Parameter Id="%AID%_UP-%TT%%CC%210" Offset="4" BitOffset="0" Name="Channel%C%OutModifier"  ParameterType="%AID%_PT-ValueDpt14" Text="Multiplikator" Value="1" />
+                <Parameter Id="%AID%_UP-%TT%%CC%310" Offset="8" BitOffset="0" Name="Channel%C%CalcModifier" ParameterType="%AID%_PT-ValueDpt14" Text="Multiplikator" Value="1" />
               </Union>
 
               <Union SizeInBit="8">
@@ -26,12 +26,11 @@
 
               <Union SizeInBit="16">
                 <Memory CodeSegment="%MID%" Offset="32" BitOffset="0" />
-                <Parameter Id="%AID%_UP-%TT%%CC%901" Offset="0"  BitOffset="0" Name="Channel%C%Mode"       ParameterType="%AID%_PT-MeterMode"  Text="Modus" Value="0" />
-                <Parameter Id="%AID%_UP-%TT%%CC%902" Offset="0"  BitOffset="4" Name="Channel%C%Lock"       ParameterType="%AID%_PT-MeterLock"  Text="Sperre" Value="0" />
-
-                <Parameter Id="%AID%_UP-%TT%%CC%111" Offset="1"  BitOffset="0" Name="Channel%C%Backstop"   ParameterType="%AID%_PT-OnOffYesNo" Text="Rücklaufsperre" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%112" Offset="1"  BitOffset="1" Name="Channel%C%IgnoreZero" ParameterType="%AID%_PT-OnOffYesNo" Text="Ignoriere 0" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%300" Offset="1"  BitOffset="2" Name="Channel%C%PowerCalc"  ParameterType="%AID%_PT-OnOffYesNo" Text="Leistung berechnen" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%901" Offset="0"  BitOffset="0" Name="Channel%C%Mode"             ParameterType="%AID%_PT-MeterMode"        Text="Modus" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%902" Offset="0"  BitOffset="4" Name="Channel%C%Lock"             ParameterType="%AID%_PT-MeterLock"        Text="Sperre" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%111" Offset="1"  BitOffset="0" Name="Channel%C%Backstop"         ParameterType="%AID%_PT-OnOffYesNo"       Text="Rücklaufsperre" Value="1" />
+                <Parameter Id="%AID%_UP-%TT%%CC%112" Offset="1"  BitOffset="1" Name="Channel%C%IgnoreZero"       ParameterType="%AID%_PT-OnOffYesNo"       Text="Ignoriere 0" Value="1" />
+                <Parameter Id="%AID%_UP-%TT%%CC%300" Offset="1"  BitOffset="2" Name="Channel%C%PulseCalculation" ParameterType="%AID%_PT-OnOffYesNo"       Text="Berechnen" Value="0" />
               </Union>
 
               <Union SizeInBit="48">
@@ -43,8 +42,13 @@
 
               <Union SizeInBit="32">
                 <Memory CodeSegment="%MID%" Offset="54" BitOffset="0" />
-                <Parameter Id="%AID%_UP-%TT%%CC%301" Offset="0"  BitOffset="0" Name="Channel%C%PowerWaitTime"  ParameterType="%AID%_PT-ValueDpt7Min1" Text="Mindestwartezeit" Value="15" SuffixText="s" />
-                <Parameter Id="%AID%_UP-%TT%%CC%302" Offset="2"  BitOffset="0" Name="Channel%C%PowerAbortTime" ParameterType="%AID%_PT-ValueDpt7Min1" Text="Abbruchzeit" Value="10" SuffixText="m" />
+                <Parameter Id="%AID%_UP-%TT%%CC%301" Offset="0"  BitOffset="0" Name="Channel%C%CalcWaitTime"  ParameterType="%AID%_PT-ValueDpt7Min1" Text="Mindestwartezeit" Value="15" SuffixText="s" />
+                <Parameter Id="%AID%_UP-%TT%%CC%302" Offset="2"  BitOffset="0" Name="Channel%C%CalcAbortTime" ParameterType="%AID%_PT-ValueDpt7Min1" Text="Abbruchzeit" Value="10" SuffixText="m" />
+              </Union>
+
+              <Union SizeInBit="96">
+                <Memory CodeSegment="%MID%" Offset="58" BitOffset="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%951" Offset="0" BitOffset="0" Name="Channel%C%PulseType"   ParameterType="%AID%_PT-PulseType" Text="Datentyp" Value="1" />
               </Union>
 
             </Parameters>
@@ -57,6 +61,8 @@
               <ParameterRef Id="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001" RefId="%AID%_UP-%TT%%CC%100" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%123_R-%TT%%CC%12301" RefId="%AID%_UP-%TT%%CC%123" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" RefId="%AID%_UP-%TT%%CC%122" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" RefId="%AID%_UP-%TT%%CC%122" Text="Impulse je kWh" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" RefId="%AID%_UP-%TT%%CC%122" Text="Impulse je m³" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%112_R-%TT%%CC%11201" RefId="%AID%_UP-%TT%%CC%112" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%121_R-%TT%%CC%12101" RefId="%AID%_UP-%TT%%CC%121" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101" RefId="%AID%_UP-%TT%%CC%111" />
@@ -68,6 +74,8 @@
               <ParameterRef Id="%AID%_UP-%TT%%CC%310_R-%TT%%CC%31001" RefId="%AID%_UP-%TT%%CC%310" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" RefId="%AID%_UP-%TT%%CC%301" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" RefId="%AID%_UP-%TT%%CC%302" />
+
+              <ParameterRef Id="%AID%_UP-%TT%%CC%951_R-%TT%%CC%95101" RefId="%AID%_UP-%TT%%CC%951" />
             </ParameterRefs>
             <ComObjectTable>
               <ComObject Id="%AID%_O-%TT%%CC%001" Name="Channel%C%Input"    Number="%K1%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
@@ -90,6 +98,7 @@
               <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00301" RefId="%AID%_O-%TT%%CC%003" Text="Sperren: {{0:Zähler %C%}}"  FunctionText="Zähler %C%, Sperre=1 / Entsperre=0" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" />
               <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00302" RefId="%AID%_O-%TT%%CC%003" Text="Sperren: {{0:Zähler %C%}}"  FunctionText="Zähler %C%, Sperre=0 / Entsperre=1" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" />
               <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00303" RefId="%AID%_O-%TT%%CC%003" Text="Leistung: {{0:Zähler %C%}}" FunctionText="Zähler %C%, Leistung"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-14-56" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00304" RefId="%AID%_O-%TT%%CC%003" Text="Durchfluss: {{0:Zähler %C%}}" FunctionText="Zähler %C%, Leistung"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-14-56" />
               <ComObjectRef Id="%AID%_O-%TT%%CC%004_R-%TT%%CC%00401" RefId="%AID%_O-%TT%%CC%004" Text="Reset: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Reset"         TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
             </ComObjectRefs>
           </Static>
@@ -124,10 +133,10 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="27%" />
                               </Columns>
       
-                              <Button Id="%AID%_MD-%TT%%CC%101_B-%TT%%CC%101" Text="kWh"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;kWh&quot; }" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%102_B-%TT%%CC%102" Text="Wh"   EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;Wh&quot; }" Cell="2,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%103_B-%TT%%CC%103" Text="m³/h" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;m³/l&quot; }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%104_B-%TT%%CC%104" Text="l/h"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;l/h&quot; }" Cell="2,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%101_B-%TT%%CC%101" Text="kWh" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;kWh&quot; }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%102_B-%TT%%CC%102" Text="Wh"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;Wh&quot; }" Cell="2,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%103_B-%TT%%CC%103" Text="m³"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;m³&quot; }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%104_B-%TT%%CC%104" Text="l"   EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;l&quot; }" Cell="2,3" />
                             </ParameterBlock>
 
                           </when>
@@ -135,9 +144,9 @@
                         <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
                           <!-- bei Impuls-->
                           <when test="2">
-                            <!-- Einheit -->
-                            <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" Icon="code-brackets" />
-                            <ParameterBlock Id="%AID%_PB-nnn" Name="UpdateButtons" Inline="true" Layout="Grid">
+
+
+                            <!-- <ParameterBlock Id="%AID%_PB-nnn" Name="UpdateButtons" Inline="true" Layout="Grid">
                               <Rows>
                                 <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
                                 <Row Id="%AID%_PB-nnn_R-2" Name="Row2" />
@@ -148,12 +157,12 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="27%" />
                               </Columns>
 
-                              <Button Id="%AID%_MD-%TT%%CC%131_B-%TT%%CC%131" Text="kWh"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;kWh&quot;,  &quot;inpulses&quot;: 1000, &quot;powermodifier&quot;: 1000}" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%132_B-%TT%%CC%132" Text="Wh"   EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;Wh&quot;,   &quot;inpulses&quot;: 1,    &quot;powermodifier&quot;: 1 }" Cell="2,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%133_B-%TT%%CC%133" Text="m³/h" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;m³/l&quot;, &quot;inpulses&quot;: 1000, &quot;powermodifier&quot;: 1000 }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%134_B-%TT%%CC%134" Text="l/h"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inunit&quot;: &quot;l/h&quot;,  &quot;inpulses&quot;: 1,    &quot;powermodifier&quot;: 1 }" Cell="2,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%131_B-%TT%%CC%131" Text="kWh" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;kWh&quot;, &quot;PulseCalculation&quot;: 1, &quot;InPulses&quot;: 1000, &quot;CalcModifier&quot;: 1000 }"    Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%132_B-%TT%%CC%132" Text="Wh"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;Wh&quot;,  &quot;PulseCalculation&quot;: 1, &quot;InPulses&quot;: 1,    &quot;CalcModifier&quot;: 1 }"       Cell="2,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%133_B-%TT%%CC%133" Text="m³"  EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;m³&quot;,  &quot;PulseCalculation&quot;: 2, &quot;InPulses&quot;: 1000, &quot;CalcModifier&quot;: 3600000 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%134_B-%TT%%CC%134" Text="l"   EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InUnit&quot;: &quot;l&quot;,   &quot;PulseCalculation&quot;: 2, &quot;InPulses&quot;: 1,    &quot;CalcModifier&quot;: 3600 }"    Cell="2,3" />
 
-                            </ParameterBlock>
+                            </ParameterBlock> -->
                           </when>
                         </choose>
 
@@ -200,9 +209,9 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="19%" />
                                 <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="19%" />
                               </Columns>
-                              <Button Id="%AID%_MD-%TT%%CC%011_B-%TT%%CC%011" Text="1"      EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inmodifier&quot;: 1 }" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%012_B-%TT%%CC%012" Text="* 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inmodifier&quot;: 1000 }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%013_B-%TT%%CC%013" Text="/ 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;inmodifier&quot;: 0.001 }" Cell="1,4" />
+                              <Button Id="%AID%_MD-%TT%%CC%011_B-%TT%%CC%011" Text="1"      EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1 }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%012_B-%TT%%CC%012" Text="* 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1000 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%013_B-%TT%%CC%013" Text="/ 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 0.001 }" Cell="1,4" />
                             </ParameterBlock>
                             <!-- Rücklaufsperre -->
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101" IndentLevel="1" Icon="backstop" />
@@ -219,8 +228,27 @@
                             <ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00105" />
                             <ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00303" />
 
-                            <!-- je Einheit -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" IndentLevel="1" Icon="pulse" />
+                            <!-- PulseTyp -->
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%951_R-%TT%%CC%95101" IndentLevel="1" Icon="database-import-outline" />
+                              <choose ParamRefId="%AID%_UP-%TT%%CC%951_R-%TT%%CC%95101">
+                                <!-- Individuell -->
+                                <when test="0">
+                                  <!-- Einheit -->
+                                  <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" IndentLevel="1" Icon="code-brackets" />
+                                  <!-- je Einheit -->
+                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" IndentLevel="1" Icon="pulse" />
+                                </when>
+                                <!-- Leistung -->
+                                <when test="1">
+                                  <!-- je Einheit -->
+                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" IndentLevel="1" Icon="pulse" />
+                                </when>
+                                <!-- Volumen -->
+                                <when test="2">
+                                  <!-- je Einheit -->
+                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" IndentLevel="1" Icon="pulse" />
+                                </when>
+                              </choose>
                           </when>
 
                           <!-- bei Betriebsstunden -->
@@ -257,9 +285,9 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="19%" />
                                 <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="19%" />
                               </Columns>
-                              <Button Id="%AID%_MD-%TT%%CC%021_B-%TT%%CC%021" Text="1"      EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;outmodifier&quot;: 1 }" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%022_B-%TT%%CC%022" Text="* 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;outmodifier&quot;: 1000 }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%023_B-%TT%%CC%023" Text="/ 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;channel&quot;: %C%, &quot;outmodifier&quot;: 0.001 }" Cell="1,4" />
+                              <Button Id="%AID%_MD-%TT%%CC%021_B-%TT%%CC%021" Text="1"      EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1 }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%022_B-%TT%%CC%022" Text="* 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1000 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%023_B-%TT%%CC%023" Text="/ 1000" EventHandler="meterUpdate" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 0.001 }" Cell="1,4" />
                             </ParameterBlock>
   
                           </when>
@@ -279,18 +307,46 @@
                           <!-- bei Impuls -->
                           <when test="2">
                             <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
-                            <ParameterSeparator Id="%AID%_PS-nnn" Text="Leistung" UIHint="Headline" />
 
-                            <!-- Leistung -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" IndentLevel="1" Icon="calculator" />
-                            <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
+                            <choose ParamRefId="%AID%_UP-%TT%%CC%951_R-%TT%%CC%95101">
+                              <!-- Leistung -->
                               <when test="1">
-                                <!-- Multiplikator -->
-                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%310_R-%TT%%CC%31001" IndentLevel="1" Icon="multiplication" />
-                                <!-- WaitTime-->
-                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" IndentLevel="1" Icon="timer-sand" />
-                                <!-- AbortTime -->
-                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" IndentLevel="1" Icon="timer-sand" />
+                                <ParameterSeparator Id="%AID%_PS-nnn" Text="Leistung" UIHint="Headline" />
+
+                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" IndentLevel="1" Icon="calculator" />
+                                <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
+                                  <when test="1">
+                                    <!-- Multiplikator
+                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%310_R-%TT%%CC%31001" IndentLevel="1" Icon="multiplication" /> -->
+                                  </when>
+                                </choose>
+    
+                              </when>
+                              <!-- Volumen -->
+                              <when test="2">
+                                <ParameterSeparator Id="%AID%_PS-nnn" Text="Durchfluss" UIHint="Headline" />
+
+                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" IndentLevel="1" Icon="calculator" />
+                                <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
+                                  <when test="1">
+                                    <!-- Multiplikator
+                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%310_R-%TT%%CC%31001" IndentLevel="1" Icon="multiplication" /> -->
+                                  </when>
+                                </choose>
+    
+                              </when>
+
+                              <!-- Both -->
+                              <when test=">0">
+                                <!-- DoCalc -->
+                                <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
+                                  <when test="1">
+                                    <!-- WaitTime -->
+                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" IndentLevel="1" Icon="timer-sand" />
+                                    <!-- AbortTime -->
+                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" IndentLevel="1" Icon="timer-sand" />
+                                  </when>
+                                </choose>
                               </when>
                             </choose>
 

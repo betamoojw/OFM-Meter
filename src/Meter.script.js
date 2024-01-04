@@ -1,18 +1,21 @@
 
 function meterUpdate(device, online, progress, context) {
-    if (context.inunit) {
-        device.getParameterByName("MTR_Channel" + context.channel + "InUnit").value = context.inunit;
+    if (context.InUnit) {
+        device.getParameterByName("MTR_Channel" + context.Channel + "InUnit").value = context.InUnit;
     }
-    if (context.inpulses) {
-        device.getParameterByName("MTR_Channel" + context.channel + "InPulses").value = context.inpulses;
+    if (context.InPulses) {
+        device.getParameterByName("MTR_Channel" + context.Channel + "InPulses").value = context.InPulses;
     }
-    if (context.inmodifier) {
-        device.getParameterByName("MTR_Channel" + context.channel + "InModifier").value = context.inmodifier;
+    if (context.InModifier) {
+        device.getParameterByName("MTR_Channel" + context.Channel + "InModifier").value = context.InModifier;
     }
-    if (context.outmodifier) {
-        device.getParameterByName("MTR_Channel" + context.channel + "OutModifier").value = context.outmodifier;
+    if (context.OutModifier) {
+        device.getParameterByName("MTR_Channel" + context.Channel + "OutModifier").value = context.OutModifier;
     }
-    if (context.powermodifier) {
-        device.getParameterByName("MTR_Channel" + context.channel + "PowerModifier").value = context.powermodifier;
+    if (context.CalcModifier) {
+        device.getParameterByName("MTR_Channel" + context.Channel + "CalcModifier").value = context.CalcModifier;
+    }
+    if (context.PulseCalculation) {
+        device.getParameterByName("MTR_Channel" + context.Channel + "PulseCalculation").value = context.PulseCalculation;
     }
 }
