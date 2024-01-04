@@ -1,18 +1,37 @@
 #pragma once
 #include "OpenKNX.h"
-#include "MeterCalculator.h"
+// #include "MeterCalculator.h"
+// #include "MeterTimerCounter.h"
 
 class MeterChannel : public OpenKNX::Channel
 {
 
   protected:
-    uint32_t reference = 0;
-    uint32_t counter = 0;
-    uint32_t referenceTime = 0;
-    uint32_t powerTime = 0;
-    uint16_t powerCounter = 0;
-    MeterCalculator *_calculator = nullptr;
+    uint32_t _reference = 0;
+    uint32_t _counter = 0;
+    // MeterCalculator *_calculator = nullptr;
+    // MeterTimeCounter *_timeCounter = nullptr;
     void processInputKoInput(GroupObject &ko);
+    void processInputKoReset(GroupObject &ko);
+    void processInputKoLock(GroupObject &ko);
+
+    float _calculationValue = 0;
+    uint16_t _pulses = 0;
+    uint32_t _startTime = 0;
+    uint32_t _lastTime = 0;
+    uint8_t _mode = 0;
+    bool _locked = false;
+    bool _running = false;
+
+    void pulse();
+    void loopPulse();
+    void pulseCalculate();
+    void processPulseCalculation(float value, uint32_t duration, uint32_t pulses);
+
+    void loopTimer();
+    void startTimer();
+    void stopTimer();
+    void processTimerCalculation();
 
   public:
     MeterChannel(uint8_t index);
@@ -20,6 +39,6 @@ class MeterChannel : public OpenKNX::Channel
     void setup() override;
     void loop() override;
     void processInputKo(GroupObject &ko) override;
-    void processCalculation(uint32_t value, uint32_t duration, uint32_t pulses);
+    void processTimeCounter(uint32_t seconds);
     const std::string name() override;
 };

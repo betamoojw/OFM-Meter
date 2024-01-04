@@ -24,7 +24,7 @@
                 <TypeRestriction Base="Value" SizeInBit="4">
                   <Enumeration Text="Deaktviert" Value="0" Id="%ENID%" />
                   <Enumeration Text="Standardzähler" Value="1" Id="%ENID%" />
-                  <Enumeration Text="Impulsezähler" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Impulszähler" Value="2" Id="%ENID%" />
                   <Enumeration Text="Betriebsstundenzähler" Value="3" Id="%ENID%" />
                 </TypeRestriction>
               </ParameterType>
@@ -43,15 +43,8 @@
                   <Enumeration Text="DPT 14.xxx (4-Byte-Fließkomma)" Value="2" Id="%ENID%" />
                 </TypeRestriction>
               </ParameterType>
-              <ParameterType Id="%AID%_PT-PulseCalculation" Name="PulseCalculation">
-                <TypeRestriction Base="Value" SizeInBit="4">
-                  <Enumeration Text="-" Value="0" Id="%ENID%" />
-                  <Enumeration Text="Leistung" Value="1" Id="%ENID%" />
-                  <Enumeration Text="Durchfluss" Value="2" Id="%ENID%" />
-                </TypeRestriction>
-              </ParameterType>
               <ParameterType Id="%AID%_PT-PulseType" Name="PulseType">
-                <TypeRestriction Base="Value" SizeInBit="4">
+                <TypeRestriction Base="Value" SizeInBit="2">
                   <Enumeration Text="Individuell" Value="0" Id="%ENID%" />
                   <Enumeration Text="Leistung (kWh)" Value="1" Id="%ENID%" />
                   <Enumeration Text="Volumen (m³)" Value="2" Id="%ENID%" />
