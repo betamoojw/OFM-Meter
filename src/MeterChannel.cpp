@@ -14,25 +14,23 @@ void MeterChannel::setup()
 {
     if (!ParamMTR_ChannelMode) return;
 
-    // KoBI_ChannelOutput.valueNoSend(false, DPT_Switch);
-
     // Debug
-    logDebugP("ChannelMode: %i", ParamMTR_ChannelMode);
-    logDebugP("ChannelLock: %i", ParamMTR_ChannelLock);
+    logDebugP("ChannelMode: %u", ParamMTR_ChannelMode);
+    logDebugP("ChannelLock: %u", ParamMTR_ChannelLock);
     logDebugP("ChannelInModifier: %f", ParamMTR_ChannelInModifier);
     logDebugP("ChannelOutModifier: %f", ParamMTR_ChannelOutModifier);
-    logDebugP("ChannelInType: %i", ParamMTR_ChannelInType);
-    logDebugP("ChannelOutType: %i", ParamMTR_ChannelOutType);
-    logDebugP("ChannelDurationType: %i", ParamMTR_ChannelDurationType);
-    logDebugP("ChannelInFallback: %i", ParamMTR_ChannelInFallback);
-    logDebugP("ChannelInPulses: %i", ParamMTR_ChannelInPulses);
-    logDebugP("ChannelInDistance: %i", ParamMTR_ChannelInDistance);
-    logDebugP("ChannelIgnoreZero: %i", ParamMTR_ChannelIgnoreZero);
-    logDebugP("ChannelBackstop: %i", ParamMTR_ChannelBackstop);
-    logDebugP("ChannelPulseType: %i", ParamMTR_ChannelPulseType);
-    logDebugP("ChannelPulseCalculation: %i", ParamMTR_ChannelPulseCalculation);
-    logDebugP("ChannelCalcWaitTime: %i", ParamMTR_ChannelCalcWaitTime);
-    logDebugP("ChannelCalcAbortTime: %i", ParamMTR_ChannelCalcAbortTime);
+    logDebugP("ChannelInType: %u", ParamMTR_ChannelInType);
+    logDebugP("ChannelOutType: %u", ParamMTR_ChannelOutType);
+    logDebugP("ChannelDurationType: %u", ParamMTR_ChannelDurationType);
+    logDebugP("ChannelInFallback: %u", ParamMTR_ChannelInFallback);
+    logDebugP("ChannelInPulses: %u", ParamMTR_ChannelInPulses);
+    logDebugP("ChannelInDistance: %u", ParamMTR_ChannelInDistance);
+    logDebugP("ChannelIgnoreZero: %u", ParamMTR_ChannelIgnoreZero);
+    logDebugP("ChannelBackstop: %u", ParamMTR_ChannelBackstop);
+    logDebugP("ChannelPulseType: %u", ParamMTR_ChannelPulseType);
+    logDebugP("ChannelPulseCalculation: %u", ParamMTR_ChannelPulseCalculation);
+    logDebugP("ChannelCalcWaitTime: %u", ParamMTR_ChannelCalcWaitTime);
+    logDebugP("ChannelCalcAbortTime: %u", ParamMTR_ChannelCalcAbortTime);
 
     _mode = ParamMTR_ChannelMode;
     if (_mode == 2)
@@ -54,7 +52,6 @@ void MeterChannel::loop()
 void MeterChannel::processInputKo(GroupObject &ko)
 {
     if (!_mode) return;
-
     switch (MTR_KoCalcIndex(ko.asap()))
     {
         case MTR_KoChannelInput:
@@ -71,10 +68,13 @@ void MeterChannel::processInputKo(GroupObject &ko)
 
 void MeterChannel::processInputKoReset(GroupObject &ko)
 {
-    logInfoP("Reset");
-    _counter = 0;
-    _reference = 0;
-    sendOutput();
+    if (ko.value(DPT_Switch))
+    {
+        logInfoP("Reset");
+        _counter = 0;
+        _reference = 0;
+        sendOutput();
+    }
 }
 
 void MeterChannel::processInputKoLock(GroupObject &ko)
@@ -85,16 +85,56 @@ void MeterChannel::processInputKoLock(GroupObject &ko)
 
 void MeterChannel::processInputKoInput(GroupObject &ko)
 {
+    uint32_t value = 0;
+    int32_t diff = 0;
+
     // Counter
     if (_mode == 1)
     {
+        // DPT 12.xxx
+        if (ParamMTR_ChannelInType == 0)
+        {
+            value = (uint32_t)ko.value(DPT_Value_4_Ucount) * ParamMTR_ChannelInModifier;
+            diff = (value - _reference);
+            _reference = value;
+            logTraceP("New reference %u (diff %i)", _reference, diff);
+        }
+
+        // DPT 13.xxx && DPT 14.xxx
+        else if (ParamMTR_ChannelInType == 1 || ParamMTR_ChannelInType == 2)
+        {
+            if (ParamMTR_ChannelInType == 1)
+                value = (int32_t)ko.value(DPT_Value_4_Count) * ParamMTR_ChannelInModifier;
+            else
+                value = (int32_t)((float)ko.value(DPT_Value_Amplitude) * ParamMTR_ChannelInModifier);
+
+            diff = ((int32_t)value - (int32_t)_reference);
+            _reference = (int32_t)value;
+            logTraceP("New reference %i (diff %i)", _reference, diff);
+        }
+
+        if (diff == 0) return;
+        if (ParamMTR_ChannelBackstop && diff < 0) return;
+        if (ParamMTR_ChannelInDistance > 0 && ParamMTR_ChannelInDistance < abs(diff)) return;
+        if (value == 0 && ParamMTR_ChannelIgnoreZero) return;
+
+        logDebugP("Add counter diff %i", diff);
+
+        if (counterTypeSigned())
+        {
+            _counter = (int32_t)_counter + diff;
+        }
+        else
+        {
+            _counter += diff;
+        }
     }
 
     // Impuls und True
     else if (_mode == 2 && ko.value(DPT_Switch))
     {
         _counter++;
-        logTraceP("Impuls counter %i (%f)", _counter, (float)_counter / ParamMTR_ChannelInPulses);
+        logTraceP("Impuls counter %u (%f)", _counter, (float)_counter / ParamMTR_ChannelInPulses);
         if (ParamMTR_ChannelPulseCalculation) pulse();
     }
 
@@ -110,7 +150,7 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
 
 void MeterChannel::processPulseCalculation(float value, uint32_t duration, uint32_t pulses)
 {
-    logTraceP("processCalculation %f (%ims with %i pulses)", value, duration, pulses);
+    logTraceP("processCalculation %f (%ums with %u pulses)", value, duration, pulses);
     if (ParamMTR_ChannelPulseType == 1)
     {
         KoMTR_ChannelOptional.value(value, DPT_Value_Power);
@@ -224,7 +264,8 @@ void MeterChannel::processTimerCalculation()
     // skip if locked and not add to counter
     if (!_locked) _counter += seconds;
 
-    logTraceP("processTimerCalculation: %is (%is)", seconds, _counter);
+    logTraceP("processTimerCalculation: %us (%us)", seconds, _counter);
+    sendOutput(false);
 }
 
 void MeterChannel::save()
@@ -240,7 +281,7 @@ void MeterChannel::restore()
 
     if (!ParamMTR_ChannelMode) return;
 
-    logDebugP("Restore counter %i reference %i", counter, reference);
+    logDebugP("Restore counter %u reference %u", counter, reference);
 
     _counter = counter;
     if (ParamMTR_ChannelMode == 1) _reference = reference;
@@ -248,7 +289,6 @@ void MeterChannel::restore()
 
 void MeterChannel::sendOutput(bool send /* = true */)
 {
-    logDebugP("sendCounter %i", _counter);
     if (ParamMTR_ChannelMode == 1 || ParamMTR_ChannelMode == 2)
     {
         // DPT 12.xxx
@@ -308,5 +348,30 @@ void MeterChannel::sendOutput(bool send /* = true */)
 
 void MeterChannel::printConsoleCounter()
 {
-    if (_mode > 0) logInfoP("Internal Counter: %i (Reference %i)", _counter, _reference);
+    if (!_mode) return;
+
+    if (counterTypeSigned() && referenceTypeSigned())
+        logInfoP("Counter %i - Reference %i", (int32_t)_counter, (int32_t)_reference);
+    else if (counterTypeSigned() && !referenceTypeSigned())
+        logInfoP("Counter %i - Reference %u", (int32_t)_counter, _reference);
+    else if (!counterTypeSigned() && referenceTypeSigned())
+        logInfoP("Counter %u - Reference %i", _counter, (int32_t)_reference);
+    else
+        logInfoP("Counter %u - Reference %u", _counter, _reference);
+}
+
+bool MeterChannel::counterTypeSigned()
+{
+    // Standardzähler ohne Rücklaufsperre
+    if (_mode == 1 && !ParamMTR_ChannelBackstop) return true;
+
+    return false;
+}
+
+bool MeterChannel::referenceTypeSigned()
+{
+    // Standardzähler mit DPT13 oder 14
+    if (_mode == 1 && (ParamMTR_ChannelInType == 1 || ParamMTR_ChannelInType == 2)) return true;
+
+    return false;
 }

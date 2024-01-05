@@ -73,29 +73,29 @@
               <ParameterRef Id="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" RefId="%AID%_UP-%TT%%CC%101" />
             </ParameterRefs>
             <ComObjectTable>
-              <ComObject Id="%AID%_O-%TT%%CC%001" Name="Channel%C%Input"    Number="%K1%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Enabled"  ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
-              <ComObject Id="%AID%_O-%TT%%CC%002" Name="Channel%C%Output"   Number="%K2%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Enabled"  WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled"  UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
-              <ComObject Id="%AID%_O-%TT%%CC%003" Name="Channel%C%Optional" Number="%K3%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Enabled"  WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled"  UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
-              <ComObject Id="%AID%_O-%TT%%CC%004" Name="Channel%C%Reset"    Number="%K4%" ObjectSize="1 Bit"   Text="" FunctionText=""  ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Enabled"  ReadOnInitFlag="Disabled" DatapointType="DPST-1-15" />
+              <ComObject Id="%AID%_O-%TT%%CC%000" Name="Channel%C%Input"    Number="%K0%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Enabled"  ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
+              <ComObject Id="%AID%_O-%TT%%CC%001" Name="Channel%C%Output"   Number="%K1%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Enabled"  WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled"  UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
+              <ComObject Id="%AID%_O-%TT%%CC%002" Name="Channel%C%Optional" Number="%K2%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Enabled"  WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled"  UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
+              <ComObject Id="%AID%_O-%TT%%CC%003" Name="Channel%C%Reset"    Number="%K3%" ObjectSize="1 Bit"   Text="" FunctionText=""  ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Enabled"  ReadOnInitFlag="Disabled" DatapointType="DPST-1-15" />
             </ComObjectTable>
             <ComObjectRefs>
-              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00101" RefId="%AID%_O-%TT%%CC%001" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00102" RefId="%AID%_O-%TT%%CC%001" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-13-1" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00103" RefId="%AID%_O-%TT%%CC%001" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-14-1" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00104" RefId="%AID%_O-%TT%%CC%001" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Schalten"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00105" RefId="%AID%_O-%TT%%CC%001" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählimpuls"    TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-17" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00201" RefId="%AID%_O-%TT%%CC%002" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00202" RefId="%AID%_O-%TT%%CC%002" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-13-1" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00203" RefId="%AID%_O-%TT%%CC%002" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-14-1" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00210" RefId="%AID%_O-%TT%%CC%002" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (h)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="2 Bytes" DatapointType="DPST-7-7"/>
-              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00211" RefId="%AID%_O-%TT%%CC%002" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (h)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-12-102" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00212" RefId="%AID%_O-%TT%%CC%002" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (m)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-12-101" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00213" RefId="%AID%_O-%TT%%CC%002" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (s)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-12-100" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00301" RefId="%AID%_O-%TT%%CC%003" Text="Sperren: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Sperre=1 / Entsperre=0" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00302" RefId="%AID%_O-%TT%%CC%003" Text="Sperren: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Sperre=0 / Entsperre=1" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00303" RefId="%AID%_O-%TT%%CC%003" Text="Leistung: {{0:Zähler %C%}}"   FunctionText="Zähler %C%, Leistung (W)"           TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-14-56" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00304" RefId="%AID%_O-%TT%%CC%003" Text="Durchfluss: {{0:Zähler %C%}}" FunctionText="Zähler %C%, Durchfluss (l/h)"       TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="2 Bytes" DatapointType="DPST-9-25" />
-              <ComObjectRef Id="%AID%_O-%TT%%CC%004_R-%TT%%CC%00401" RefId="%AID%_O-%TT%%CC%004" Text="Reset: {{0:Zähler %C%}}"      FunctionText="Zähler %C%, Reset"                  TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%000_R-%TT%%CC%00001" RefId="%AID%_O-%TT%%CC%000" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Referenz Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%000_R-%TT%%CC%00002" RefId="%AID%_O-%TT%%CC%000" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Referenz Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-13-1" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%000_R-%TT%%CC%00003" RefId="%AID%_O-%TT%%CC%000" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Referenz Zählerstand"   TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-14-1" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%000_R-%TT%%CC%00004" RefId="%AID%_O-%TT%%CC%000" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Schalten"               TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%000_R-%TT%%CC%00005" RefId="%AID%_O-%TT%%CC%000" Text="Eingang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählimpuls"             TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-17" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00101" RefId="%AID%_O-%TT%%CC%001" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"            TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00102" RefId="%AID%_O-%TT%%CC%001" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"            TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-13-1" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00103" RefId="%AID%_O-%TT%%CC%001" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Zählerstand"            TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" DatapointType="DPST-14-1" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00110" RefId="%AID%_O-%TT%%CC%001" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (h)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="2 Bytes" DatapointType="DPST-7-7"/>
+              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00111" RefId="%AID%_O-%TT%%CC%001" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (h)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-12-102" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00112" RefId="%AID%_O-%TT%%CC%001" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (m)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-12-101" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%001_R-%TT%%CC%00113" RefId="%AID%_O-%TT%%CC%001" Text="Ausgang: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Betriebsdauer (s)"      TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-12-100" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00201" RefId="%AID%_O-%TT%%CC%002" Text="Sperren: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Sperre=1 / Entsperre=0" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00202" RefId="%AID%_O-%TT%%CC%002" Text="Sperren: {{0:Zähler %C%}}"    FunctionText="Zähler %C%, Sperre=0 / Entsperre=1" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="1 Bit" DatapointType="DPST-1-1" ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00203" RefId="%AID%_O-%TT%%CC%002" Text="Leistung: {{0:Zähler %C%}}"   FunctionText="Zähler %C%, Leistung (W)"           TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="4 Bytes" DatapointType="DPST-14-56" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%002_R-%TT%%CC%00204" RefId="%AID%_O-%TT%%CC%002" Text="Durchfluss: {{0:Zähler %C%}}" FunctionText="Zähler %C%, Durchfluss (l/h)"       TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" ObjectSize="2 Bytes" DatapointType="DPST-9-25" />
+              <ComObjectRef Id="%AID%_O-%TT%%CC%003_R-%TT%%CC%00301" RefId="%AID%_O-%TT%%CC%003" Text="Reset: {{0:Zähler %C%}}"      FunctionText="Zähler %C%, Reset"                  TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" />
             </ComObjectRefs>
           </Static>
           <Dynamic>
@@ -120,8 +120,8 @@
                           <when test="1 3">
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%902_R-%TT%%CC%90201" Icon="lock-outline" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%902_R-%TT%%CC%90201">
-                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00301" /></when>
-                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00302" /></when>
+                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00201" /></when>
+                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00202" /></when>
                             </choose>
                           </when>
                         </choose>
@@ -137,11 +137,11 @@
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001" Icon="database-import-outline" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001">
                               <!-- DPT 12-->
-                              <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00101" /></when>
+                              <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00001" /></when>
                               <!-- DPT 13-->
-                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00102" /></when>
+                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00002" /></when>
                               <!-- DPT 14-->
-                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00103" /></when>
+                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00003" /></when>
                             </choose>
                             <!-- Einheit -->
                             <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" Icon="code-brackets" />
@@ -158,9 +158,9 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="19%" />
                                 <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="19%" />
                               </Columns>
-                              <Button Id="%AID%_MD-%TT%%CC%011_B-%TT%%CC%011" Text="1"      EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;in&quot;: 1 }" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%012_B-%TT%%CC%012" Text="* 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;in&quot;: 1000 }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%013_B-%TT%%CC%013" Text="/ 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;in&quot;: 0.001 }" Cell="1,4" />
+                              <Button Id="%AID%_MD-%TT%%CC%011_B-%TT%%CC%011" Text="1"      EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1 }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%012_B-%TT%%CC%012" Text="* 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1000 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%013_B-%TT%%CC%013" Text="/ 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 0.001 }" Cell="1,4" />
                             </ParameterBlock>
                             <!-- Rücklaufsperre -->
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101" Icon="backstop" />
@@ -174,7 +174,7 @@
 
                           <!-- bei Impuls -->
                           <when test="2">
-                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00105" />
+                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00005" />
 
                             <!-- PulseTyp -->
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" Icon="database-import-outline" />
@@ -192,7 +192,9 @@
                                   <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" Icon="pulse" />
 
                                   <!-- KO -->
-                                  <ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00303" />
+                                  <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
+                                    <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00203" /></when>
+                                  </choose>
                                 </when>
                                 <!-- Volumen -->
                                 <when test="2">
@@ -200,14 +202,16 @@
                                   <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" Icon="pulse" />
 
                                   <!-- KO -->
-                                  <ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00304" />
+                                  <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
+                                    <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00204" /></when>
+                                  </choose>
                                 </when>
                               </choose>
                           </when>
 
                           <!-- bei Betriebsstunden -->
                           <when test="3">
-                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00104" />
+                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00004" />
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%123_R-%TT%%CC%12301" Icon="timer-sand"/>
                           </when>
                         </choose>
@@ -222,11 +226,11 @@
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%200_R-%TT%%CC%20001" Icon="database-export-outline" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%200_R-%TT%%CC%20001">
                               <!-- DPT 12-->
-                              <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00201" /></when>
+                              <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00101" /></when>
                               <!-- DPT 13-->
-                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00202" /></when>
+                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00102" /></when>
                               <!-- DPT 14-->
-                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00203" /></when>
+                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00103" /></when>
                             </choose>
 
                             <!-- Multiplizieren -->
@@ -241,9 +245,9 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="19%" />
                                 <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="19%" />
                               </Columns>
-                              <Button Id="%AID%_MD-%TT%%CC%021_B-%TT%%CC%021" Text="1"      EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;out&quot;: 1 }" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%022_B-%TT%%CC%022" Text="* 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;out&quot;: 1000 }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%023_B-%TT%%CC%023" Text="/ 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;out&quot;: 0.001 }" Cell="1,4" />
+                              <Button Id="%AID%_MD-%TT%%CC%021_B-%TT%%CC%021" Text="1"      EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1 }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%022_B-%TT%%CC%022" Text="* 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1000 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%023_B-%TT%%CC%023" Text="/ 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 0.001 }" Cell="1,4" />
                             </ParameterBlock>
   
                           </when>
@@ -252,10 +256,10 @@
                             <!-- Ausgang -->
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%201_R-%TT%%CC%20101" Icon="database-export-outline" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%201_R-%TT%%CC%20101">
-                              <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00210" /></when>
-                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00211" /></when>
-                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00212" /></when>
-                              <when test="3"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00213" /></when>
+                              <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00110" /></when>
+                              <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00111" /></when>
+                              <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00112" /></when>
+                              <when test="3"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00113" /></when>
                             </choose>
                           </when>
 
@@ -310,11 +314,9 @@
                         </choose>
 
                         <!-- Reset-->
-                        <ComObjectRefRef RefId="%AID%_O-%TT%%CC%004_R-%TT%%CC%00401" />
+                        <ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00301" />
                       </when>
                     </choose>
-
-
 
                   </ParameterBlock>
                 </Channel>
