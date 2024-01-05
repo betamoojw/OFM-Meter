@@ -9,6 +9,7 @@ class MeterChannel : public OpenKNX::Channel
   protected:
     uint32_t _reference = 0;
     uint32_t _counter = 0;
+    uint32_t _lastOut = 0;
     // MeterCalculator *_calculator = nullptr;
     // MeterTimeCounter *_timeCounter = nullptr;
     void processInputKoInput(GroupObject &ko);
@@ -20,8 +21,12 @@ class MeterChannel : public OpenKNX::Channel
     uint32_t _startTime = 0;
     uint32_t _lastTime = 0;
     uint8_t _mode = 0;
+    uint16_t pulseDivider = 1;
     bool _locked = false;
     bool _running = false;
+    bool _afterStartup = false;
+
+    void sendOutput(bool send = true);
 
     void pulse();
     void loopPulse();
@@ -38,7 +43,11 @@ class MeterChannel : public OpenKNX::Channel
 
     void setup() override;
     void loop() override;
+    void printConsoleCounter();
     void processInputKo(GroupObject &ko) override;
     void processTimeCounter(uint32_t seconds);
     const std::string name() override;
+
+    void save();
+    void restore();
 };

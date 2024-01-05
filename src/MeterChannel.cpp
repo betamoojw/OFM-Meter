@@ -17,24 +17,30 @@ void MeterChannel::setup()
     // KoBI_ChannelOutput.valueNoSend(false, DPT_Switch);
 
     // Debug
-    logTraceP("ChannelMode: %i", ParamMTR_ChannelMode);
-    logTraceP("ChannelLock: %i", ParamMTR_ChannelLock);
-    logTraceP("ChannelInModifier: %f", ParamMTR_ChannelInModifier);
-    logTraceP("ChannelOutModifier: %f", ParamMTR_ChannelOutModifier);
-    logTraceP("ChannelInType: %i", ParamMTR_ChannelInType);
-    logTraceP("ChannelOutType: %i", ParamMTR_ChannelOutType);
-    logTraceP("ChannelDurationType: %i", ParamMTR_ChannelDurationType);
-    logTraceP("ChannelInFallback: %i", ParamMTR_ChannelInFallback);
-    logTraceP("ChannelInPulses: %i", ParamMTR_ChannelInPulses);
-    logTraceP("ChannelInDistance: %i", ParamMTR_ChannelInDistance);
-    logTraceP("ChannelIgnoreZero: %i", ParamMTR_ChannelIgnoreZero);
-    logTraceP("ChannelBackstop: %i", ParamMTR_ChannelBackstop);
-    logTraceP("ChannelPulseType: %i", ParamMTR_ChannelPulseType);
-    logTraceP("ChannelPulseCalculation: %i", ParamMTR_ChannelPulseCalculation);
-    logTraceP("ChannelCalcWaitTime: %i", ParamMTR_ChannelCalcWaitTime);
-    logTraceP("ChannelCalcAbortTime: %i", ParamMTR_ChannelCalcAbortTime);
+    logDebugP("ChannelMode: %i", ParamMTR_ChannelMode);
+    logDebugP("ChannelLock: %i", ParamMTR_ChannelLock);
+    logDebugP("ChannelInModifier: %f", ParamMTR_ChannelInModifier);
+    logDebugP("ChannelOutModifier: %f", ParamMTR_ChannelOutModifier);
+    logDebugP("ChannelInType: %i", ParamMTR_ChannelInType);
+    logDebugP("ChannelOutType: %i", ParamMTR_ChannelOutType);
+    logDebugP("ChannelDurationType: %i", ParamMTR_ChannelDurationType);
+    logDebugP("ChannelInFallback: %i", ParamMTR_ChannelInFallback);
+    logDebugP("ChannelInPulses: %i", ParamMTR_ChannelInPulses);
+    logDebugP("ChannelInDistance: %i", ParamMTR_ChannelInDistance);
+    logDebugP("ChannelIgnoreZero: %i", ParamMTR_ChannelIgnoreZero);
+    logDebugP("ChannelBackstop: %i", ParamMTR_ChannelBackstop);
+    logDebugP("ChannelPulseType: %i", ParamMTR_ChannelPulseType);
+    logDebugP("ChannelPulseCalculation: %i", ParamMTR_ChannelPulseCalculation);
+    logDebugP("ChannelCalcWaitTime: %i", ParamMTR_ChannelCalcWaitTime);
+    logDebugP("ChannelCalcAbortTime: %i", ParamMTR_ChannelCalcAbortTime);
 
     _mode = ParamMTR_ChannelMode;
+    if (_mode == 2)
+    {
+        pulseDivider = ParamMTR_ChannelInPulses;
+    }
+
+    sendOutput(false);
 }
 
 void MeterChannel::loop()
@@ -65,13 +71,16 @@ void MeterChannel::processInputKo(GroupObject &ko)
 
 void MeterChannel::processInputKoReset(GroupObject &ko)
 {
+    logInfoP("Reset");
     _counter = 0;
+    _reference = 0;
+    sendOutput();
 }
 
 void MeterChannel::processInputKoLock(GroupObject &ko)
 {
     _locked = ko.value(DPT_Switch);
-    logDebugP("processInputKoLock: %s", _locked ? "lock" : "unlock");
+    logTraceP("processInputKoLock: %s", _locked ? "lock" : "unlock");
 }
 
 void MeterChannel::processInputKoInput(GroupObject &ko)
@@ -101,7 +110,7 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
 
 void MeterChannel::processPulseCalculation(float value, uint32_t duration, uint32_t pulses)
 {
-    logDebugP("processCalculation %f (%ims with %i pulses)", value, duration, pulses);
+    logTraceP("processCalculation %f (%ims with %i pulses)", value, duration, pulses);
     if (ParamMTR_ChannelPulseType == 1)
     {
         KoMTR_ChannelOptional.value(value, DPT_Value_Power);
@@ -110,6 +119,8 @@ void MeterChannel::processPulseCalculation(float value, uint32_t duration, uint3
     {
         KoMTR_ChannelOptional.value(value, DPT_Value_Volume_Flow);
     }
+
+    sendOutput();
 }
 
 void MeterChannel::pulse()
@@ -120,6 +131,7 @@ void MeterChannel::pulse()
         return;
     }
 
+    _counter++;
     _pulses++;
     _lastTime = millis();
 
@@ -131,6 +143,13 @@ void MeterChannel::pulse()
 
 void MeterChannel::loopPulse()
 {
+    if (openknx.common.afterStartupDelay() && !_afterStartup)
+    {
+        sendOutput();
+
+        _afterStartup = true;
+    }
+
     // Wait time
     if (_pulses > 0 && delayCheck(_startTime, ParamMTR_ChannelCalcWaitTime * 1000)) pulseCalculate();
 
@@ -164,7 +183,7 @@ void MeterChannel::startTimer()
 
 void MeterChannel::stopTimer()
 {
-    logDebugP("timerStop %is", _counter);
+    logTraceP("Stop timer");
 
     // process last second(s) with ceil
     if (!_locked) _counter += ceil((millis() - _startTime) / 1000);
@@ -173,22 +192,7 @@ void MeterChannel::stopTimer()
     _lastTime = 0;
     _running = false;
 
-    if (ParamMTR_ChannelDurationType == 0)
-    {
-        KoMTR_ChannelOutut.value(_counter / 3600, DPT_TimePeriodHrs);
-    }
-    else if (ParamMTR_ChannelDurationType == 1)
-    {
-        KoMTR_ChannelOutut.value(_counter / 3600, DPT_Value_4_Ucount);
-    }
-    else if (ParamMTR_ChannelDurationType == 2)
-    {
-        KoMTR_ChannelOutut.value(_counter / 60, DPT_Value_4_Ucount);
-    }
-    else if (ParamMTR_ChannelDurationType == 3)
-    {
-        KoMTR_ChannelOutut.value(_counter, DPT_Value_4_Ucount);
-    }
+    sendOutput();
 }
 
 void MeterChannel::loopTimer()
@@ -197,7 +201,7 @@ void MeterChannel::loopTimer()
     {
         if (_lastTime && delayCheck(_lastTime, ParamMTR_ChannelInFallback * 1000))
         {
-            logErrorP("Stop timer (Fallback)");
+            logTraceP("Stop timer (Fallback)");
             stopTimer();
         }
 
@@ -221,4 +225,88 @@ void MeterChannel::processTimerCalculation()
     if (!_locked) _counter += seconds;
 
     logTraceP("processTimerCalculation: %is (%is)", seconds, _counter);
+}
+
+void MeterChannel::save()
+{
+    openknx.flash.writeInt(_counter);
+    openknx.flash.writeInt(_reference);
+}
+
+void MeterChannel::restore()
+{
+    uint32_t counter = openknx.flash.readInt();
+    uint32_t reference = openknx.flash.readInt();
+
+    if (!ParamMTR_ChannelMode) return;
+
+    logDebugP("Restore counter %i reference %i", counter, reference);
+
+    _counter = counter;
+    if (ParamMTR_ChannelMode == 1) _reference = reference;
+}
+
+void MeterChannel::sendOutput(bool send /* = true */)
+{
+    logDebugP("sendCounter %i", _counter);
+    if (ParamMTR_ChannelMode == 1 || ParamMTR_ChannelMode == 2)
+    {
+        // DPT 12.xxx
+        if (ParamMTR_ChannelOutType == 0)
+            if (send)
+                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Ucount);
+            else
+                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Ucount);
+
+        // DPT 13.xxx
+        else if (ParamMTR_ChannelOutType == 1)
+            if (send)
+                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Count);
+            else
+                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Count);
+
+        // DPT 14.xxx
+        else if (ParamMTR_ChannelOutType == 2)
+        {
+            if (send)
+                KoMTR_ChannelOutput.value((float)_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_Amplitude);
+            else
+                KoMTR_ChannelOutput.valueNoSend((float)_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_Amplitude);
+        }
+    }
+    else if (ParamMTR_ChannelMode == 3)
+    {
+        // DPT 7.7
+        if (ParamMTR_ChannelDurationType == 0)
+            if (send)
+                KoMTR_ChannelOutput.value(_counter / 3600, DPT_TimePeriodHrs);
+            else
+                KoMTR_ChannelOutput.valueNoSend(_counter / 3600, DPT_TimePeriodHrs);
+
+        // DPT 12.102
+        else if (ParamMTR_ChannelDurationType == 1)
+            if (send)
+                KoMTR_ChannelOutput.value(_counter / 3600, DPT_Value_4_Ucount);
+            else
+                KoMTR_ChannelOutput.valueNoSend(_counter / 3600, DPT_Value_4_Ucount);
+
+        // DPT 12.101
+        else if (ParamMTR_ChannelDurationType == 2)
+            if (send)
+                KoMTR_ChannelOutput.value(_counter / 60, DPT_Value_4_Ucount);
+            else
+                KoMTR_ChannelOutput.valueNoSend(_counter / 60, DPT_Value_4_Ucount);
+
+        // DPT 12.100
+        else if (ParamMTR_ChannelDurationType == 3)
+            if (send)
+                KoMTR_ChannelOutput.value(_counter, DPT_Value_4_Ucount);
+            else
+                KoMTR_ChannelOutput.valueNoSend(_counter, DPT_Value_4_Ucount);
+    }
+}
+
+void MeterChannel::printConsoleCounter()
+{
+    if (_mode > 0) logInfoP("Internal Counter: %i (Reference %i)", _counter, _reference);
 }
