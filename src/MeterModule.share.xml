@@ -13,6 +13,9 @@
               <ParameterType Id="%AID%_PT-ValueDpt12Min1" Name="ValueDpt12Min1">
                 <TypeNumber SizeInBit="32" Type="unsignedInt" minInclusive="1" maxInclusive="4294967295" />
               </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterValue" Name="MeterValue">
+                <TypeText SizeInBit="88" />
+              </ParameterType>
               <ParameterType Id="%AID%_PT-MeterLock" Name="MeterLock">
                 <TypeRestriction Base="Value" SizeInBit="2">
                   <Enumeration Text="nicht aktiv" Value="0" Id="%ENID%" />
@@ -65,6 +68,12 @@
           </Static>
           <Dynamic>
             <Channel Name="MainChannel" Text="Zähler" Number="%TT%" Id="%AID%_CH-%TT%" Icon="gauge">
+              <ParameterBlock Name="Docu" Text="Dokumentation" Id="%AID%_PB-nnn" Icon="information-outline" HelpContext="MTR-Docu">
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Dokumentation" UIHint="Headline" />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Die Dokumentation ist als Kontextsensitive Hilfe verfügbar, siehe den Text im unteren Bereich des Bildschirms." />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Version des Zählermodul: %ModuleVersion%" UIHint="Headline" />
+              </ParameterBlock>
               <op:include href="MeterModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="MTR" IsInner="true" />
             </Channel>
           </Dynamic>

@@ -10,6 +10,10 @@
               <Parameter Id="%AID%_P-%TT%%CC%000" Name="Channel%C%Name" ParameterType="%AID%_PT-Text40Byte" Text="Beschreibung" Value="" />
               <Parameter Id="%AID%_P-%TT%%CC%010" Name="Channel%C%InUnit" ParameterType="%AID%_PT-Text40Byte" Text="Einheit" Value="" />
               <Parameter Id="%AID%_P-%TT%%CC%020" Name="Channel%C%OutUnit" ParameterType="%AID%_PT-Text40Byte" Text="Einheit" Value="" />
+
+              <Parameter Id="%AID%_P-%TT%%CC%800" Name="Channel%C%Counter" ParameterType="%AID%_PT-ValueDpt12" Text="Zählerstand" Value="0" />
+              <Parameter Id="%AID%_P-%TT%%CC%801" Name="Channel%C%CounterSigned" ParameterType="%AID%_PT-ValueDpt13" Text="Zählerstand" Value="0" />
+              <Parameter Id="%AID%_P-%TT%%CC%802" Name="Channel%C%Reference" ParameterType="%AID%_PT-MeterValue" Text="Referenzzähler" Value="0" Access="Read" />
               <Union SizeInBit="64">
                 <Memory CodeSegment="%MID%" Offset="0" BitOffset="0" />
                 <Parameter Id="%AID%_UP-%TT%%CC%110" Offset="0" BitOffset="0" Name="Channel%C%InModifier"   ParameterType="%AID%_PT-ValueDpt14" Text="Multiplikator" Value="1" />
@@ -55,6 +59,7 @@
               <ParameterRef Id="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101" RefId="%AID%_UP-%TT%%CC%901" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%902_R-%TT%%CC%90201" RefId="%AID%_UP-%TT%%CC%902" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001" RefId="%AID%_UP-%TT%%CC%100" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" RefId="%AID%_UP-%TT%%CC%101" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%123_R-%TT%%CC%12301" RefId="%AID%_UP-%TT%%CC%123" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" RefId="%AID%_UP-%TT%%CC%122" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" RefId="%AID%_UP-%TT%%CC%122" Text="Impulse je kWh" />
@@ -70,7 +75,9 @@
               <ParameterRef Id="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" RefId="%AID%_UP-%TT%%CC%301" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" RefId="%AID%_UP-%TT%%CC%302" />
 
-              <ParameterRef Id="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" RefId="%AID%_UP-%TT%%CC%101" />
+              <ParameterRef Id="%AID%_P-%TT%%CC%800_R-%TT%%CC%80001" RefId="%AID%_P-%TT%%CC%800" />
+              <ParameterRef Id="%AID%_P-%TT%%CC%801_R-%TT%%CC%80101" RefId="%AID%_P-%TT%%CC%801" />
+              <ParameterRef Id="%AID%_P-%TT%%CC%802_R-%TT%%CC%80201" RefId="%AID%_P-%TT%%CC%802" />
             </ParameterRefs>
             <ComObjectTable>
               <ComObject Id="%AID%_O-%TT%%CC%000" Name="Channel%C%Input"    Number="%K0%" ObjectSize="4 Bytes" Text="" FunctionText=""  ReadFlag="Disabled" WriteFlag="Enabled"  CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Enabled"  ReadOnInitFlag="Disabled" DatapointType="DPST-12-1" />
@@ -101,7 +108,7 @@
           <Dynamic>
             <ChannelIndependentBlock>
               <!-- START INCLUDE HERE -->
-              <ParameterBlock Id="%AID%_PB-nnn" Name="Channel%C%Page" Text="Zähler %C%: {{0: ...}}" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" Icon="numeric" HelpContext="Empty">
+              <ParameterBlock Id="%AID%_PB-nnn" Name="Channel%C%Page" Text="Zähler %C%: {{0: ...}}" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" Icon="gauge" HelpContext="Empty">
                 <Channel Id="%AID%_CH-MTR%CC%" Name="f%CC%MTR" Number="MTR%CC%" Text="Zähler %C%: {{0: ...}}" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001">
                   <ParameterBlock Id="%AID%_PB-nnn" Name="Channel%C%Wrapper" Inline="true">
                     <ParameterSeparator Id="%AID%_PS-nnn" Text="Zähler" UIHint="Headline" />
@@ -112,7 +119,7 @@
                     <ParameterRefRef RefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101" Icon="gauge" HelpContext="MTR-MeterMode" />
                     <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
                       <!-- Aktiv -->
-                      <when test="!=0">
+                      <when test=">0">
 
                         <!-- Sperre -->
                         <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
@@ -315,10 +322,75 @@
 
                         <!-- Reset-->
                         <ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00301" />
+
                       </when>
                     </choose>
 
                   </ParameterBlock>
+
+                  <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
+                    <when test=">0">
+                      <ParameterBlock Name="Counter" Text="Zählerstand" Id="%AID%_PB-nnn" Icon="numeric">
+                        <!-- Access & Control -->
+                        <ParameterSeparator Id="%AID%_PS-nnn" Text="Zählerstand" UIHint="Headline" />
+                        <ParameterSeparator Id="%AID%_PS-nnn" Text="Hier hast du die Möglichkeit, den aktuellen Zählerstand (inklusive Referenzzähler, falls vorhanden) auszulesen. Außerdem besteht die Option, den Zählerstand zurückzusetzen." />
+                        <ParameterSeparator Id="%AID%_PS-nnn" Text=" " />
+
+                        <ParameterBlock Id="%AID%_PB-nnn" Name="A" Inline="true" Layout="Grid">
+                          <Rows>
+                            <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
+                          </Rows>
+                          <Columns>
+                            <Column Id="%AID%_PB-nnn_C-1" Name="Col1" Width="25%" />
+                            <Column Id="%AID%_PB-nnn_C-2" Name="Col2" Width="20%" />
+                            <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="14%" />
+                            <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="14%" />
+                            <Column Id="%AID%_PB-nnn_C-5" Name="Col5" Width="14%" />
+                          </Columns>
+                          <ParameterSeparator Id="%AID%_PS-nnn" Text="Zählerstand" Cell="1,1" />
+                          <Button Id="%AID%_MD-%TT%%CC%100_B-%TT%%CC%000" Text="" EventHandlerOnline="ConnectionOriented" EventHandler="readMeter" EventHandlerParameters="{ &quot;Module&quot;: %TT%, &quot;Channel&quot;: %C% }" Cell="1,3" Icon="sync" />
+                          <Button Id="%AID%_MD-%TT%%CC%101_B-%TT%%CC%101" Text="" EventHandlerOnline="ConnectionOriented" EventHandler="writeMeter" EventHandlerParameters="{ &quot;Module&quot;: %TT%, &quot;Channel&quot;: %C% }" Cell="1,4" Icon="pencil" />
+
+                          <Button Id="%AID%_MD-%TT%%CC%102_B-%TT%%CC%102" Text="" EventHandlerOnline="ConnectionOriented" EventHandler="resetMeter" EventHandlerParameters="{ &quot;Module&quot;: %TT%, &quot;Channel&quot;: %C%, &quot;Full&quot;: 0 }" Cell="1,5" Icon="backspace-outline" />
+
+                          <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
+                            <when test="1">
+                              <!-- Rücklaufsperre -->
+                              <choose ParamRefId="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101">
+                                <!-- Signed-->
+                                <when test="0"><ParameterRefRef RefId="%AID%_P-%TT%%CC%801_R-%TT%%CC%80101" Cell="1,2" /></when>
+                                <!-- Unsigend -->
+                                <when test="1"><ParameterRefRef RefId="%AID%_P-%TT%%CC%800_R-%TT%%CC%80001" Cell="1,2" /></when>
+                              </choose>
+                            </when>
+                            <when test="2 3"><ParameterRefRef RefId="%AID%_P-%TT%%CC%800_R-%TT%%CC%80001" Cell="1,2" /></when>
+                          </choose>
+                        </ParameterBlock>
+
+                        <!-- Referenz -->
+                        <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
+                          <when test="1">
+                            <ParameterBlock Id="%AID%_PB-nnn" Name="B" Inline="true" Layout="Grid">
+                              <Rows>
+                                <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
+                              </Rows>
+                              <Columns>
+                                <Column Id="%AID%_PB-nnn_C-1" Name="Col1" Width="25%" />
+                                <Column Id="%AID%_PB-nnn_C-2" Name="Col2" Width="20%" />
+                                <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="14%" />
+                                <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="28%" />
+                              </Columns>
+                              <ParameterSeparator Id="%AID%_PS-nnn" Text="Referenzzähler" Cell="1,1" />
+                              <ParameterRefRef RefId="%AID%_P-%TT%%CC%802_R-%TT%%CC%80201" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%103_B-%TT%%CC%103" Text="Komplettreset" EventHandlerOnline="ConnectionOriented" EventHandler="resetMeter" EventHandlerParameters="{ &quot;Module&quot;: %TT%, &quot;Channel&quot;: %C%, &quot;Full&quot;: 1 }" Cell="1,4" Icon="trash-can-outline" />
+                            </ParameterBlock>
+                          </when>
+                        </choose>
+                        
+                      </ParameterBlock>
+                    </when>
+                  </choose>
+
                 </Channel>
               </ParameterBlock>
             </ChannelIndependentBlock>

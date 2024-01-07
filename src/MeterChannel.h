@@ -38,8 +38,6 @@ class MeterChannel : public OpenKNX::Channel
     void stopTimer();
     void processTimerCalculation();
 
-    bool counterTypeSigned();
-    bool referenceTypeSigned();
 
   public:
     MeterChannel(uint8_t index);
@@ -53,4 +51,11 @@ class MeterChannel : public OpenKNX::Channel
 
     void save();
     void restore();
+
+    uint32_t counter();
+    uint32_t reference();
+    bool counterTypeSigned();
+    bool referenceTypeSigned();
+    void counter(uint32_t value);
+    void reset(bool full = false);
 };

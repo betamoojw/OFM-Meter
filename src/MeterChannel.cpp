@@ -33,9 +33,20 @@ void MeterChannel::setup()
     logDebugP("ChannelCalcAbortTime: %u", ParamMTR_ChannelCalcAbortTime);
 
     _mode = ParamMTR_ChannelMode;
-    if (_mode == 2)
+    if (_mode == 0)
+    {
+        // Reset
+        _counter = 0;
+        _reference = 0;
+    }
+    else if (_mode == 2)
     {
         pulseDivider = ParamMTR_ChannelInPulses;
+        _reference = 0; // unused
+    }
+    else if (_mode == 3)
+    {
+        _reference = 0; // unused
     }
 
     sendOutput(false);
@@ -374,4 +385,34 @@ bool MeterChannel::referenceTypeSigned()
     if (_mode == 1 && (ParamMTR_ChannelInType == 1 || ParamMTR_ChannelInType == 2)) return true;
 
     return false;
+}
+
+uint32_t MeterChannel::counter()
+{
+    return _counter;
+}
+
+uint32_t MeterChannel::reference()
+{
+    return _reference;
+}
+
+void MeterChannel::counter(uint32_t value)
+{
+    if (counterTypeSigned())
+        logInfoP("Set new counter %i", value);
+    else
+        logInfoP("Set new counter %u", value);
+
+    _counter = value;
+}
+void MeterChannel::reset(bool full /*= false*/)
+{
+    if (full)
+        logInfoP("Reset counter + reference");
+    else
+        logInfoP("Reset counter");
+
+    _counter = 0;
+    if (full) _reference = 0;
 }

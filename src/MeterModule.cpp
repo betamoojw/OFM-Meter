@@ -22,7 +22,7 @@ void MeterModule::setup()
 void MeterModule::loop()
 {
     // Every hour
-    if (delayCheck(openknx.flash.lastWrite(), 3600000))
+    if (delayCheck(openknx.flash.lastWrite(), 6 * 3600 * 1000))
     {
         openknx.flash.save();
     }
@@ -117,6 +117,79 @@ bool MeterModule::processCommand(const std::string command, bool diagnose)
 
     logIndentDown();
     return true;
+}
+
+bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength)
+{
+    if (objectIndex != 175) return false;
+
+    switch (propertyId)
+    {
+        case 1:
+        {
+            uint8_t channel = data[0];
+            uint32_t counter = _channels[channel]->counter();
+            bool counterSigned = _channels[channel]->counterTypeSigned();
+            // counter = (int32_t)-2147483648;
+            // counterSigned = true;
+            // counter = 4294967295;
+            // counterSigned = false;
+
+            uint32_t reference = _channels[channel]->reference();
+            bool referenceSigned = _channels[channel]->referenceTypeSigned();
+            // reference = (int32_t)-2147483648;
+            // referenceSigned = true;
+            // reference = 4294967295;
+            // referenceSigned = false;
+
+            resultData[0] = 0; // Reserved for ErrorCode
+
+            resultData[1] = counterSigned;
+            resultData[2] = (uint8_t)(counter >> 24);
+            resultData[3] = (uint8_t)(counter >> 16);
+            resultData[4] = (uint8_t)(counter >> 8);
+            resultData[5] = (uint8_t)counter;
+
+            resultData[6] = referenceSigned;
+            resultData[7] = (uint8_t)(reference >> 24);
+            resultData[8] = (uint8_t)(reference >> 16);
+            resultData[9] = (uint8_t)(reference >> 8);
+            resultData[10] = (uint8_t)reference;
+            resultLength = 11;
+            return true;
+        }
+        case 2:
+        {
+            uint8_t channel = data[0];
+
+            _channels[channel]->reset(data[1]);
+            openknx.flash.save();
+            resultData[0] = 0;
+            resultLength = 1;
+            return true;
+        }
+        case 3:
+        {
+            uint8_t channel = data[0];
+            if ((bool)data[1] != _channels[channel]->counterTypeSigned())
+            {
+                logErrorP("Convertion error! %i", channel);
+                resultData[0] = 1; // Typ error
+                resultLength = 1;
+                return true;
+            }
+
+            uint32_t counter = (data[2] << 24) | (data[3] << 16) | (data[4] << 8) | data[5];
+            _channels[channel]->counter(counter);
+            openknx.flash.save();
+
+            resultData[0] = 0;
+            resultLength = 1;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 MeterModule openknxMeterModule;

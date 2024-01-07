@@ -22,6 +22,8 @@ class MeterModule : public OpenKNX::Module
     void readFlash(const uint8_t *buffer, const uint16_t size) override;
     void writeFlash() override;
     uint16_t flashSize() override;
+
+    bool processFunctionProperty(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength) override;
 };
 
 extern MeterModule openknxMeterModule;
