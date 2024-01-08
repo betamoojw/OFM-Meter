@@ -31,6 +31,7 @@ void MeterChannel::setup()
     logDebugP("ChannelPulseCalculation: %u", ParamMTR_ChannelPulseCalculation);
     logDebugP("ChannelCalcWaitTime: %u", ParamMTR_ChannelCalcWaitTime);
     logDebugP("ChannelCalcAbortTime: %u", ParamMTR_ChannelCalcAbortTime);
+    logDebugP("ChannelSendOnChange: %u", ParamMTR_ChannelSendOnChange);
 
     _mode = ParamMTR_ChannelMode;
     if (_mode == 0)
@@ -41,7 +42,7 @@ void MeterChannel::setup()
     }
     else if (_mode == 2)
     {
-        pulseDivider = ParamMTR_ChannelInPulses;
+        _pulseDivider = ParamMTR_ChannelInPulses;
         _reference = 0; // unused
     }
     else if (_mode == 3)
@@ -58,6 +59,15 @@ void MeterChannel::loop()
 
     if (_mode == 2 && ParamMTR_ChannelPulseCalculation) loopPulse();
     if (_mode == 3) loopTimer();
+
+    if (_mode == 1 || _mode == 2)
+    {
+        int32_t diff = _counter - _lastOut;
+        if (ParamMTR_ChannelSendOnChange && abs(diff) >= ParamMTR_ChannelSendOnChange)
+        {
+            sendOutput();
+        }
+    }
 }
 
 void MeterChannel::processInputKo(GroupObject &ko)
@@ -129,7 +139,7 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
         if (ParamMTR_ChannelInDistance > 0 && ParamMTR_ChannelInDistance < abs(diff)) return;
         if (value == 0 && ParamMTR_ChannelIgnoreZero) return;
 
-        logDebugP("Add counter diff %i", diff);
+        logTraceP("Add counter diff %i", diff);
 
         if (counterTypeSigned())
         {
@@ -300,29 +310,30 @@ void MeterChannel::restore()
 
 void MeterChannel::sendOutput(bool send /* = true */)
 {
+    _lastOut = _counter;
     if (ParamMTR_ChannelMode == 1 || ParamMTR_ChannelMode == 2)
     {
         // DPT 12.xxx
         if (ParamMTR_ChannelOutType == 0)
             if (send)
-                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Ucount);
+                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Ucount);
             else
-                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Ucount);
+                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Ucount);
 
         // DPT 13.xxx
         else if (ParamMTR_ChannelOutType == 1)
             if (send)
-                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Count);
+                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Count);
             else
-                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_4_Count);
+                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Count);
 
         // DPT 14.xxx
         else if (ParamMTR_ChannelOutType == 2)
         {
             if (send)
-                KoMTR_ChannelOutput.value((float)_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_Amplitude);
+                KoMTR_ChannelOutput.value((float)_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_Amplitude);
             else
-                KoMTR_ChannelOutput.valueNoSend((float)_counter * ParamMTR_ChannelOutModifier / pulseDivider, DPT_Value_Amplitude);
+                KoMTR_ChannelOutput.valueNoSend((float)_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_Amplitude);
         }
     }
     else if (ParamMTR_ChannelMode == 3)
@@ -406,6 +417,7 @@ void MeterChannel::counter(uint32_t value)
 
     _counter = value;
 }
+
 void MeterChannel::reset(bool full /*= false*/)
 {
     if (full)
@@ -415,4 +427,6 @@ void MeterChannel::reset(bool full /*= false*/)
 
     _counter = 0;
     if (full) _reference = 0;
+
+    sendOutput();
 }

@@ -121,6 +121,7 @@ bool MeterModule::processCommand(const std::string command, bool diagnose)
 
 bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength)
 {
+    if (!knx.configured()) return false;
     if (objectIndex != 175) return false;
 
     switch (propertyId)

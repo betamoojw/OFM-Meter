@@ -53,6 +53,16 @@
                   <Enumeration Text="Volumen (m³)" Value="2" Id="%ENID%" />
                 </TypeRestriction>
               </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterSendOnChange" Name="MeterSendOnChange">
+                <TypeRestriction Base="Value" SizeInBit="4">
+                  <Enumeration Text="Deaktiviert" Value="0" Id="%ENID%" />
+                  <Enumeration Text="je 1er" Value="1" Id="%ENID%" />
+                  <Enumeration Text="je 10er" Value="2" Id="%ENID%" />
+                  <Enumeration Text="je 100er" Value="3" Id="%ENID%" />
+                  <Enumeration Text="je 1000er" Value="4" Id="%ENID%" />
+                  <Enumeration Text="je 10000er" Value="5" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
             </ParameterTypes>
             <Parameters>
             </Parameters>

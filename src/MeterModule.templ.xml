@@ -50,6 +50,11 @@
                 <Parameter Id="%AID%_UP-%TT%%CC%301" Offset="0"  BitOffset="0" Name="Channel%C%CalcWaitTime"  ParameterType="%AID%_PT-ValueDpt7Min1" Text="Mindestwartezeit" Value="15" SuffixText="s" />
                 <Parameter Id="%AID%_UP-%TT%%CC%302" Offset="2"  BitOffset="0" Name="Channel%C%CalcAbortTime" ParameterType="%AID%_PT-ValueDpt7Min1" Text="Abbruchzeit" Value="10" SuffixText="m" />
               </Union>
+              
+              <Union SizeInBit="16">
+                <Memory CodeSegment="%MID%" Offset="58" BitOffset="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%202" Offset="0"  BitOffset="0" Name="Channel%C%SendOnChange"  ParameterType="%AID%_PT-ValueDpt7" Text="Senden bei Änderung" Value="1" SuffixText="" />
+              </Union>
 
             </Parameters>
             <ParameterRefs>
@@ -70,6 +75,7 @@
               <ParameterRef Id="%AID%_UP-%TT%%CC%200_R-%TT%%CC%20001" RefId="%AID%_UP-%TT%%CC%200" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" RefId="%AID%_UP-%TT%%CC%300" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%201_R-%TT%%CC%20101" RefId="%AID%_UP-%TT%%CC%201" />
+              <ParameterRef Id="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20201" RefId="%AID%_UP-%TT%%CC%202" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%110_R-%TT%%CC%11001" RefId="%AID%_UP-%TT%%CC%110" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%210_R-%TT%%CC%21001" RefId="%AID%_UP-%TT%%CC%210" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" RefId="%AID%_UP-%TT%%CC%301" />
@@ -165,9 +171,9 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="19%" />
                                 <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="19%" />
                               </Columns>
-                              <Button Id="%AID%_MD-%TT%%CC%011_B-%TT%%CC%011" Text="1"      EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1 }" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%012_B-%TT%%CC%012" Text="* 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1000 }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%013_B-%TT%%CC%013" Text="/ 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 0.001 }" Cell="1,4" />
+                              <Button Id="%AID%_MD-%TT%%CC%011_B-%TT%%CC%011" Text="1"      EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1 }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%012_B-%TT%%CC%012" Text="* 1000" EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 1000 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%013_B-%TT%%CC%013" Text="/ 1000" EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 0.001 }" Cell="1,4" />
                             </ParameterBlock>
                             <!-- Rücklaufsperre -->
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101" Icon="backstop" />
@@ -240,6 +246,23 @@
                               <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00103" /></when>
                             </choose>
 
+                            <!-- Senden bei Änderung -->
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20201" Icon="delta" />
+                            <ParameterBlock Id="%AID%_PB-nnn" Name="ButtonsSendOnChange" Inline="true" Layout="Grid">
+                              <Rows>
+                                <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
+                              </Rows>
+                              <Columns>
+                                <Column Id="%AID%_PB-nnn_C-1" Name="Col1" Width="46%" />
+                                <Column Id="%AID%_PB-nnn_C-2" Name="Col2" Width="16%" />
+                                <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="19%" />
+                                <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="19%" />
+                              </Columns>
+                              <Button Id="%AID%_MD-%TT%%CC%031_B-%TT%%CC%031" Text="1"    EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;SendOnChange&quot;: 1 }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%032_B-%TT%%CC%032" Text="100"  EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;SendOnChange&quot;: 100 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%033_B-%TT%%CC%033" Text="1000" EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;SendOnChange&quot;: 1000 }" Cell="1,4" />
+                            </ParameterBlock>
+                            
                             <!-- Multiplizieren -->
                             <ParameterRefRef RefId="%AID%_UP-%TT%%CC%210_R-%TT%%CC%21001" Icon="multiplication" />
                             <ParameterBlock Id="%AID%_PB-nnn" Name="ButtonsOut" Inline="true" Layout="Grid">
@@ -252,9 +275,9 @@
                                 <Column Id="%AID%_PB-nnn_C-3" Name="Col3" Width="19%" />
                                 <Column Id="%AID%_PB-nnn_C-4" Name="Col4" Width="19%" />
                               </Columns>
-                              <Button Id="%AID%_MD-%TT%%CC%021_B-%TT%%CC%021" Text="1"      EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1 }" Cell="1,2" />
-                              <Button Id="%AID%_MD-%TT%%CC%022_B-%TT%%CC%022" Text="* 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1000 }" Cell="1,3" />
-                              <Button Id="%AID%_MD-%TT%%CC%023_B-%TT%%CC%023" Text="/ 1000" EventHandler="updateMeterModifier" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 0.001 }" Cell="1,4" />
+                              <Button Id="%AID%_MD-%TT%%CC%021_B-%TT%%CC%021" Text="1"      EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1 }" Cell="1,2" />
+                              <Button Id="%AID%_MD-%TT%%CC%022_B-%TT%%CC%022" Text="* 1000" EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 1000 }" Cell="1,3" />
+                              <Button Id="%AID%_MD-%TT%%CC%023_B-%TT%%CC%023" Text="/ 1000" EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;OutModifier&quot;: 0.001 }" Cell="1,4" />
                             </ParameterBlock>
   
                           </when>
