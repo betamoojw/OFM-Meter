@@ -15,7 +15,7 @@ function readMeter(device, online, progress, context) {
     progress.setText("Zähler "  + context.Channel + ": Abrufen der Zählerdaten...");
     online.connect();
 
-    var resp = online.invokeFunctionProperty(0xAF, 1, [context.Channel - 1]);
+    var resp = online.invokeFunctionProperty(0xA0, 2, [1, context.Channel - 1]);
     if (resp[0] != 0) {
         throw new Error("Zähler "  + context.Channel + ": Es ist ein unbekannter Fehler aufgetreten!");
     }
@@ -46,7 +46,7 @@ function resetMeter(device, online, progress, context) {
     progress.setText("Zähler "  + context.Channel + ": Resete Zählerdaten...");
     online.connect();
 
-    var resp = online.invokeFunctionProperty(0xAF, 2, [context.Channel - 1, context.Full]);
+    var resp = online.invokeFunctionProperty(0xA0, 2, [2, context.Channel - 1, context.Full]);
     if (resp[0] != 0) {
         throw new Error("Zähler "  + context.Channel + ": Es ist ein unbekannter Fehler aufgetreten!");
     }
@@ -66,25 +66,26 @@ function writeMeter(device, online, progress, context) {
     online.connect();
 
     data = [];
-    data[0] = context.Channel - 1;
+    data[0] = 3; // Action
+    data[1] = context.Channel - 1;
 
     mode = device.getParameterByName("MTR_Channel" + context.Channel + "Mode").value;
     backstop = device.getParameterByName("MTR_Channel" + context.Channel + "Backstop").value;
 
-    data[1] = (mode == 1 && !backstop);
+    data[2] = (mode == 1 && !backstop);
 
-    if (data[1]) {
+    if (data[2]) {
         counter = device.getParameterByName("MTR_Channel" + context.Channel + "CounterSigned").value;
     } else {
         counter = device.getParameterByName("MTR_Channel" + context.Channel + "Counter").value;
     }
 
-    data[2] = (counter >> 24) & 0xFF;
-    data[3] = (counter >> 16) & 0xFF;
-    data[4] = (counter >> 8) & 0xFF;
-    data[5] = counter & 0xFF;
+    data[3] = (counter >> 24) & 0xFF;
+    data[4] = (counter >> 16) & 0xFF;
+    data[5] = (counter >> 8) & 0xFF;
+    data[6] = counter & 0xFF;
 
-    var resp = online.invokeFunctionProperty(0xAF, 3, data);
+    var resp = online.invokeFunctionProperty(0xA0, 2, data);
     if (resp[0] != 0) {
         throw new Error("Zähler "  + context.Channel + ": Es ist ein unbekannter Fehler aufgetreten!");
     }

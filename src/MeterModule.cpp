@@ -122,13 +122,14 @@ bool MeterModule::processCommand(const std::string command, bool diagnose)
 bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength)
 {
     if (!knx.configured()) return false;
-    if (objectIndex != 175) return false;
+    if (objectIndex != 160) return false;
+    if (propertyId != 2) return false;
 
-    switch (propertyId)
+    switch (data[0])
     {
         case 1:
         {
-            uint8_t channel = data[0];
+            uint8_t channel = data[1];
             uint32_t counter = _channels[channel]->counter();
             bool counterSigned = _channels[channel]->counterTypeSigned();
             // counter = (int32_t)-2147483648;
@@ -161,9 +162,9 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
         }
         case 2:
         {
-            uint8_t channel = data[0];
+            uint8_t channel = data[1];
 
-            _channels[channel]->reset(data[1]);
+            _channels[channel]->reset(data[2]);
             openknx.flash.save();
             resultData[0] = 0;
             resultLength = 1;
@@ -171,8 +172,8 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
         }
         case 3:
         {
-            uint8_t channel = data[0];
-            if ((bool)data[1] != _channels[channel]->counterTypeSigned())
+            uint8_t channel = data[1];
+            if ((bool)data[2] != _channels[channel]->counterTypeSigned())
             {
                 logErrorP("Convertion error! %i", channel);
                 resultData[0] = 1; // Typ error
@@ -180,7 +181,7 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
                 return true;
             }
 
-            uint32_t counter = (data[2] << 24) | (data[3] << 16) | (data[4] << 8) | data[5];
+            uint32_t counter = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
             _channels[channel]->counter(counter);
             openknx.flash.save();
 
