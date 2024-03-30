@@ -1,7 +1,5 @@
 #pragma once
 #include "OpenKNX.h"
-// #include "MeterCalculator.h"
-// #include "MeterTimerCounter.h"
 
 class MeterChannel : public OpenKNX::Channel
 {
@@ -10,8 +8,7 @@ class MeterChannel : public OpenKNX::Channel
     uint32_t _reference = 0;
     uint32_t _counter = 0;
     uint32_t _lastOut = 0;
-    // MeterCalculator *_calculator = nullptr;
-    // MeterTimeCounter *_timeCounter = nullptr;
+    
     void processInputKoInput(GroupObject &ko);
     void processInputKoReset(GroupObject &ko);
     void processInputKoLock(GroupObject &ko);

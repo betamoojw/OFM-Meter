@@ -12,7 +12,7 @@ const std::string MeterModule::version()
 
 void MeterModule::setup()
 {
-    for (uint8_t i = 0; i < MTR_ChannelCount; i++)
+    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
     {
         _channels[i] = new MeterChannel(i);
         _channels[i]->setup();
@@ -21,20 +21,14 @@ void MeterModule::setup()
 
 void MeterModule::loop()
 {
-    // Every hour
-    if (delayCheck(openknx.flash.lastWrite(), 6 * 3600 * 1000))
-    {
-        openknx.flash.save();
-    }
+    if (ParamMTR_VisibleChannels == 0) return;
 
     uint8_t processed = 0;
     do
         _channels[_currentChannel]->loop();
 
-    while (openknx.freeLoopIterate(MTR_ChannelCount, _currentChannel, processed));
+    while (openknx.freeLoopIterate(ParamMTR_VisibleChannels, _currentChannel, processed));
 }
-
-#define MTR_KoCalcChannel(number) ((number >= MTR_KoBlockOffset && number < MTR_KoBlockOffset + MTR_ChannelCount * MTR_KoBlockSize) ? (number - MTR_KoBlockOffset) / MTR_KoBlockSize : -1)
 
 void MeterModule::processInputKo(GroupObject &ko)
 {
@@ -42,23 +36,14 @@ void MeterModule::processInputKo(GroupObject &ko)
     uint16_t asap = ko.asap();
     switch (asap)
     {
-            // case MTR_KoDayNight:
-            //     processInputKoDayNight(ko);
-            //     break;
-
+        // case MTR_KoDayNight:
+        //     processInputKoDayNight(ko);
+        //     break;
         default:
             // forward to channel
-
             int16_t channel = MTR_KoCalcChannel(asap);
+
             if (channel >= 0) _channels[channel]->processInputKo(ko);
-
-            // logDebugP("Index %i -> %i", asap, channelIndex);
-
-            // if (asap >= MTR_KoBlockOffset && asap < MTR_KoBlockOffset + MTR_ChannelCount * MTR_KoBlockSize)
-            // {
-            //     uint8_t i = (asap - MTR_KoBlockOffset) / MTR_KoBlockSize;
-            //     _channels[i]->processInputKo(ko);
-            // }
             break;
     }
 }
@@ -66,7 +51,7 @@ void MeterModule::processInputKo(GroupObject &ko)
 uint16_t MeterModule::flashSize()
 {
     // Version + Data (Channel * Inputs * (Dpt + Value))
-    return 1 + (MTR_ChannelCount * 8);
+    return 1 + (ParamMTR_VisibleChannels * 8);
 }
 
 void MeterModule::readFlash(const uint8_t *buffer, const uint16_t size)
@@ -82,8 +67,8 @@ void MeterModule::readFlash(const uint8_t *buffer, const uint16_t size)
     }
 
     uint8_t savedChannels = (size - 1) / 8;
-    logDebugP("Reading channel data from flash (%i/%i)", savedChannels, MTR_ChannelCount);
-    for (uint8_t i = 0; i < MIN(savedChannels, MTR_ChannelCount); i++)
+    logDebugP("Reading channel data from flash (%i/%i)", savedChannels, ParamMTR_VisibleChannels);
+    for (uint8_t i = 0; i < MIN(savedChannels, ParamMTR_VisibleChannels); i++)
     {
         _channels[i]->restore();
     }
@@ -92,7 +77,7 @@ void MeterModule::readFlash(const uint8_t *buffer, const uint16_t size)
 void MeterModule::writeFlash()
 {
     openknx.flash.writeByte(1); // Version
-    for (uint8_t i = 0; i < MTR_ChannelCount; i++)
+    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
     {
         _channels[i]->save();
     }
@@ -112,7 +97,7 @@ bool MeterModule::processCommand(const std::string command, bool diagnose)
     logInfoP("Show internal counter");
     logIndentUp();
 
-    for (uint8_t i = 0; i < MTR_ChannelCount; i++)
+    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
         _channels[i]->printConsoleCounter();
 
     logIndentDown();
