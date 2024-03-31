@@ -192,7 +192,6 @@ void MeterChannel::pulse()
         return;
     }
 
-    _counter++;
     _pulses++;
     _lastTime = millis();
 
