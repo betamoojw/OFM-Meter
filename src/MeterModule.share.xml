@@ -85,19 +85,20 @@
             </Script>  
           </Static>
           <Dynamic>
-            <Channel Name="MainChannel" Text="Zähler" Number="%TT%" Id="%AID%_CH-%TT%" Icon="gauge">
+            <Channel Id="%AID%_CH-%PREFIX%" Number="%PREFIX%" Name="Main" Text="Zähler" Icon="gauge">
+
+              <ParameterBlock Id="%AID%_PB-5" Name="Settings" Text="Einstellungen" Icon="cog-outline" HelpContext="Empty">
+                <!-- Verfuegbare-Kanaele -->
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
+                <ParameterRefRef RefId="%AID%_UP-%TT%00001_R-%TT%0000101" HelpContext="BASE-Verfuegbare-Kanaele" IndentLevel="1" />
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
+              </ParameterBlock>
+
               <ParameterBlock Name="Docu" Text="Dokumentation" Id="%AID%_PB-nnn" Icon="information-outline" HelpContext="MTR-Docu">
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="Dokumentation" UIHint="Headline" />
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="Die Dokumentation ist als Kontextsensitive Hilfe verfügbar, siehe den Text im unteren Bereich des Bildschirms." />
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="Version des Zählermodul: %ModuleVersion%" UIHint="Headline" />
-              </ParameterBlock>
-
-              <ParameterBlock Id="%AID%_PB-5" Name="Basic" Text="Basiseinstellung" Icon="cog-outline" HelpContext="Empty">
-                <!-- Verfuegbare-Kanaele -->
-                <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
-                <ParameterRefRef RefId="%AID%_UP-%TT%00001_R-%TT%0000101" HelpContext="BASE-Verfuegbare-Kanaele" IndentLevel="1" />
-                <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
               </ParameterBlock>
 
               <op:include href="MeterModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="MTR" IsInner="true" />
