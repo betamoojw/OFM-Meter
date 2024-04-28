@@ -188,6 +188,7 @@ void MeterChannel::pulse()
 {
     if (_startTime == 0)
     {
+        // first start
         _startTime = millis();
         return;
     }
@@ -195,6 +196,9 @@ void MeterChannel::pulse()
     _pulses++;
     _lastTime = millis();
 
+    /*
+     * Prüf nun ob die Mindestwartezeit bereits vorbei ist. Wenn ja dann berechne die Leistung
+     */
     if (delayCheck(_startTime, ParamMTR_ChannelCalcWaitTime * 1000))
     {
         pulseCalculate();
@@ -210,11 +214,14 @@ void MeterChannel::loopPulse()
         _afterStartup = true;
     }
 
-    // Wait time
-    if (_pulses > 0 && delayCheck(_startTime, ParamMTR_ChannelCalcWaitTime * 1000)) pulseCalculate();
+    if (_pulses > 0 && _startTime > 0)
+    {
+        // Wait time
+        if (delayCheck(_startTime, ParamMTR_ChannelCalcWaitTime * 1000)) pulseCalculate();
 
-    // Abort time
-    if (_calculationValue > 0 && _startTime > 0 && delayCheck(_startTime, ParamMTR_ChannelCalcAbortTime * 60000)) pulseCalculate();
+        // Abort time
+        if (delayCheck(_startTime, ParamMTR_ChannelCalcAbortTime * 60000) && _calculationValue > 0) pulseCalculate();
+    }
 }
 
 void MeterChannel::pulseCalculate()
