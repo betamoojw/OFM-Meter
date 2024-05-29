@@ -120,10 +120,10 @@
 
                     <ParameterSeparator Id="%AID%_PS-nnn" Text="Zähler" UIHint="Headline" />
                     <!-- Name -->
-                    <ParameterRefRef RefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" Icon="tag-outline" HelpContext="BASE-ChannelName" />
+                    <ParameterRefRef RefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" IndentLevel="1" HelpContext="BASE-ChannelName" />
 
                     <!-- Mode -->
-                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101" Icon="gauge" HelpContext="MTR-MeterMode" />
+                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101" IndentLevel="1" HelpContext="MTR-MeterMode" />
                     <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
                       <!-- Aktiv -->
                       <when test=">0">
@@ -132,7 +132,7 @@
                         <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
                           <!-- bei Standard, Betriebsstunden-->
                           <when test="1 3">
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%902_R-%TT%%CC%90201" Icon="lock-outline" HelpContext="MTR-LockMode" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%902_R-%TT%%CC%90201" IndentLevel="1" HelpContext="MTR-LockMode" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%902_R-%TT%%CC%90201">
                               <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00201" /></when>
                               <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00202" /></when>
@@ -148,7 +148,7 @@
                           <!-- bei Standard -->
                           <when test="1">
                             <!-- Typ -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001" Icon="database-import-outline" HelpContext="MTR-Type" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001" IndentLevel="1" HelpContext="MTR-Type" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001">
                               <!-- DPT 12-->
                               <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00001" /></when>
@@ -158,10 +158,10 @@
                               <when test="2"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00003" /></when>
                             </choose>
                             <!-- Einheit -->
-                            <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" Icon="code-brackets" HelpContext="MTR-Unit" />
+                            <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" IndentLevel="1" HelpContext="MTR-Unit" />
 
                             <!-- Multiplizieren -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%110_R-%TT%%CC%11001" Icon="multiplication" HelpContext="MTR-Modifier" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%110_R-%TT%%CC%11001" IndentLevel="1" HelpContext="MTR-Modifier" />
                             <ParameterBlock Id="%AID%_PB-nnn" Name="ButtonsIn" Inline="true" Layout="Grid">
                               <Rows>
                                 <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
@@ -177,13 +177,13 @@
                               <Button Id="%AID%_MD-%TT%%CC%013_B-%TT%%CC%013" Text="/ 1000" EventHandler="updateMeterUI" EventHandlerParameters="{ &quot;Channel&quot;: %C%, &quot;InModifier&quot;: 0.001 }" Cell="1,4" />
                             </ParameterBlock>
                             <!-- Rücklaufsperre -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101" Icon="backstop" HelpContext="MTR-Backstop" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101" IndentLevel="1" HelpContext="MTR-Backstop" />
 
                             <!-- Ignoriere 0 -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%112_R-%TT%%CC%11201" Icon="diameter-variant" HelpContext="MTR-IgnoreZero" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%112_R-%TT%%CC%11201" IndentLevel="1" HelpContext="MTR-IgnoreZero" />
 
                             <!-- Max Abstand -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%121_R-%TT%%CC%12101" Icon="diameter-outline" HelpContext="MTR-Distance" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%121_R-%TT%%CC%12101" IndentLevel="1" HelpContext="MTR-Distance" />
                           </when>
 
                           <!-- bei Impuls -->
@@ -191,19 +191,19 @@
                             <ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00005" />
 
                             <!-- PulseTyp -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" Icon="database-import-outline" HelpContext="MTR-PulseType" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" IndentLevel="1" HelpContext="MTR-PulseType" />
                               <choose ParamRefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101">
                                 <!-- Individuell -->
                                 <when test="0">
                                   <!-- Einheit -->
-                                  <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" Icon="code-brackets" HelpContext="MTR-Unit" />
+                                  <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" IndentLevel="1" HelpContext="MTR-Unit" />
                                   <!-- je Einheit -->
-                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" Icon="pulse" HelpContext="MTR-Unit" />
+                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" IndentLevel="1" HelpContext="MTR-Unit" />
                                 </when>
                                 <!-- Leistung -->
                                 <when test="1">
                                   <!-- je Einheit -->
-                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" Icon="pulse" HelpContext="MTR-Pulses" />
+                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" IndentLevel="1" HelpContext="MTR-Pulses" />
 
                                   <!-- KO -->
                                   <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
@@ -213,7 +213,7 @@
                                 <!-- Volumen -->
                                 <when test="2">
                                   <!-- je Einheit -->
-                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" Icon="pulse" HelpContext="MTR-Pulses" />
+                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" IndentLevel="1" HelpContext="MTR-Pulses" />
 
                                   <!-- KO -->
                                   <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
@@ -226,7 +226,7 @@
                           <!-- bei Betriebsstunden -->
                           <when test="3">
                             <ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00004" />
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%123_R-%TT%%CC%12301" Icon="timer-sand" HelpContext="MTR-TimeFallback"/>
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%123_R-%TT%%CC%12301" IndentLevel="1" HelpContext="MTR-TimeFallback"/>
                           </when>
                         </choose>
                         
@@ -237,7 +237,7 @@
                           <!-- bei Standard, Impulse -->
                           <when test="1 2">
                             <!-- Ausgang -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%200_R-%TT%%CC%20001" Icon="database-export-outline" HelpContext="MTR-Type" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%200_R-%TT%%CC%20001" IndentLevel="1" HelpContext="MTR-Type" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%200_R-%TT%%CC%20001">
                               <!-- DPT 12-->
                               <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00101" /></when>
@@ -248,7 +248,7 @@
                             </choose>
 
                             <!-- Senden bei Änderung -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20201" Icon="delta" HelpContext="MTR-SendOnChange" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20201" IndentLevel="1" HelpContext="MTR-SendOnChange" />
                             <ParameterBlock Id="%AID%_PB-nnn" Name="ButtonsSendOnChange" Inline="true" Layout="Grid">
                               <Rows>
                                 <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
@@ -265,7 +265,7 @@
                             </ParameterBlock>
                             
                             <!-- Multiplizieren -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%210_R-%TT%%CC%21001" Icon="multiplication" HelpContext="MTR-Modifier" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%210_R-%TT%%CC%21001" IndentLevel="1" HelpContext="MTR-Modifier" />
                             <ParameterBlock Id="%AID%_PB-nnn" Name="ButtonsOut" Inline="true" Layout="Grid">
                               <Rows>
                                 <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
@@ -285,7 +285,7 @@
                           <!-- bei Betriebsstunden -->
                           <when test="3">
                             <!-- Ausgang -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%201_R-%TT%%CC%20101" Icon="database-export-outline" HelpContext="MTR-TimeType" />
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%201_R-%TT%%CC%20101" IndentLevel="1" HelpContext="MTR-TimeType" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%201_R-%TT%%CC%20101">
                               <when test="0"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00110" /></when>
                               <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%001_R-%TT%%CC%00111" /></when>
@@ -303,15 +303,15 @@
                               <when test=">0">
                                 <ParameterSeparator Id="%AID%_PS-nnn" Text="Leistung" UIHint="Headline" />
 
-                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" Icon="calculator" HelpContext="MTR-Calculation" />
+                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" IndentLevel="1" HelpContext="MTR-Calculation" />
 
                                 <!-- DoCalc -->
                                 <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
                                   <when test="1">
                                     <!-- WaitTime -->
-                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" Icon="timer-sand" HelpContext="MTR-Calculation" />
+                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" IndentLevel="1" HelpContext="MTR-Calculation" />
                                     <!-- AbortTime -->
-                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" Icon="timer-sand" HelpContext="MTR-Calculation" />
+                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" IndentLevel="1" HelpContext="MTR-Calculation" />
                                   </when>
                                 </choose>
                               </when>
