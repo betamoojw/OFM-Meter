@@ -116,7 +116,7 @@
               <choose ParamRefId="%AID%_UP-%TT%00001_R-%TT%0000101">
                 <when test="&gt;=%C%">
                   <!-- START INCLUDE HERE -->
-                  <ParameterBlock Id="%AID%_PB-nnn" Name="Channel%C%Page" Text="Zähler %C%: {{0: ...}}" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" Icon="gauge" HelpContext="Empty" ShowInComObjectTree="true">
+                  <ParameterBlock Id="%AID%_PB-nnn" Name="Channel%C%Page" Text="Zähler %C%: {{0: ...}}" TextParameterRefId="%AID%_P-%TT%%CC%000_R-%TT%%CC%00001" Icon="counter" HelpContext="Empty" ShowInComObjectTree="true">
 
                     <ParameterSeparator Id="%AID%_PS-nnn" Text="Zähler" UIHint="Headline" />
                     <!-- Name -->

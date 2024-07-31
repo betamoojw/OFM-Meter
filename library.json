@@ -1,7 +1,16 @@
 {
   "name": "OFM-Meter",
   "version": "0.2.0",
-  "dependencies":
-  {
+  "dependencies": {},
+  "description": "A counter module to enable different counters including conversion.",
+  "homepage": "https://openknx.de",
+  "authors": {
+    "name": "Marco Scholl",
+    "email": "develop@marco-scholl.de",
+    "maintainer": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenKNX/OFM-Meter"
   }
 }
