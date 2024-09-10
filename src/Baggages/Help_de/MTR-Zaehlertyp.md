@@ -1,4 +1,6 @@
-### Modus
+﻿### Zählertyp
+
+Es gibt drei verschiedene Zählertypen:
 
 #### Standardzähler
 
@@ -15,3 +17,5 @@ Der Impulszähler wertet die eingehenden EIN-Telegramme aus und erhöht den inte
 #### Betriebsstundenzähler
 
 Der Betriebsstundenzähler erhält über ein Schalt-KO den Status eines zu überwachenden Gerätes und zählt intern die Sekunden, wie lange dieses im Betrieb ist. Auch hier können mehrere Zähler parallel arbeiten und bedarfsweise per Sperr- oder Reset-KO gesteuert werden.
+
+

@@ -40,32 +40,47 @@ void MeterChannel::setup()
         _counter = 0;
         _reference = 0;
     }
+    else if (_mode == 1)
+    {
+        _outModifier = ParamMTR_ChannelOutModifier;
+    }
     else if (_mode == 2)
     {
-        _pulseDivider = ParamMTR_ChannelInPulses;
+        _outModifier = 1.0 / ParamMTR_ChannelInPulses;
         _reference = 0; // unused
     }
     else if (_mode == 3)
     {
         _reference = 0; // unused
     }
-
-    sendOutput(false);
 }
 
 void MeterChannel::loop()
 {
+
     if (!_mode) return;
+    if (!openknx.common.afterStartupDelay()) return;
+
+    if (_firstRun)
+    {
+        // after counter read from flash
+        _firstRun = false;
+        sendOutput(true);
+    }
 
     if (_mode == 2 && ParamMTR_ChannelPulseCalculation) loopPulse();
     if (_mode == 3) loopTimer();
 
     if (_mode == 1 || _mode == 2)
     {
-        int32_t diff = _counter - _lastOut;
+        int32_t diff = (_counter - _lastOut);
         if (ParamMTR_ChannelSendOnChange && abs(diff) >= ParamMTR_ChannelSendOnChange)
         {
             sendOutput();
+        }
+        else if (diff != 0)
+        {
+            sendOutput(false);
         }
     }
 }
@@ -73,7 +88,18 @@ void MeterChannel::loop()
 void MeterChannel::processInputKo(GroupObject &ko)
 {
     if (!_mode) return;
-    switch (MTR_KoCalcIndex(ko.asap()))
+
+    uint16_t koNumber = ko.asap();
+    int8_t koIndex = MTR_KoCalcIndex(koNumber);
+    // logInfoP("koNumber %i -> koIndex %i", koNumber, koIndex);
+
+    // External KO -> to Channel Mapping
+    if (ParamMTR_ChannelInSourceKo > 0 && ParamMTR_ChannelInSourceKo == koNumber)
+    {
+        koIndex = MTR_KoChannelInput;
+    }
+
+    switch (koIndex)
     {
         case MTR_KoChannelInput:
             processInputKoInput(ko);
@@ -180,8 +206,6 @@ void MeterChannel::processPulseCalculation(float value, uint32_t duration, uint3
     {
         KoMTR_ChannelOptional.value(value, DPT_Value_Volume_Flow);
     }
-
-    sendOutput();
 }
 
 void MeterChannel::pulse()
@@ -207,12 +231,12 @@ void MeterChannel::pulse()
 
 void MeterChannel::loopPulse()
 {
-    if (openknx.common.afterStartupDelay() && !_afterStartup)
-    {
-        sendOutput();
+    // if (openknx.common.afterStartupDelay() && !_afterStartup)
+    // {
+    //     sendOutput();
 
-        _afterStartup = true;
-    }
+    //     _afterStartup = true;
+    // }
 
     if (_pulses > 0 && _startTime > 0)
     {
@@ -316,30 +340,32 @@ void MeterChannel::restore()
 
 void MeterChannel::sendOutput(bool send /* = true */)
 {
-    _lastOut = _counter;
+    if (send)
+        _lastOut = _counter;
+
     if (ParamMTR_ChannelMode == 1 || ParamMTR_ChannelMode == 2)
     {
         // DPT 12.xxx
         if (ParamMTR_ChannelOutType == 0)
             if (send)
-                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Ucount);
+                KoMTR_ChannelOutput.value(_counter * _outModifier, DPT_Value_4_Ucount);
             else
-                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Ucount);
+                KoMTR_ChannelOutput.valueNoSend(_counter * _outModifier, DPT_Value_4_Ucount);
 
         // DPT 13.xxx
         else if (ParamMTR_ChannelOutType == 1)
             if (send)
-                KoMTR_ChannelOutput.value(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Count);
+                KoMTR_ChannelOutput.value(_counter * _outModifier, DPT_Value_4_Count);
             else
-                KoMTR_ChannelOutput.valueNoSend(_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_4_Count);
+                KoMTR_ChannelOutput.valueNoSend(_counter * _outModifier, DPT_Value_4_Count);
 
         // DPT 14.xxx
         else if (ParamMTR_ChannelOutType == 2)
         {
             if (send)
-                KoMTR_ChannelOutput.value((float)_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_Amplitude);
+                KoMTR_ChannelOutput.value((float)_counter * _outModifier, DPT_Value_Amplitude);
             else
-                KoMTR_ChannelOutput.valueNoSend((float)_counter * ParamMTR_ChannelOutModifier / _pulseDivider, DPT_Value_Amplitude);
+                KoMTR_ChannelOutput.valueNoSend((float)_counter * _outModifier, DPT_Value_Amplitude);
         }
     }
     else if (ParamMTR_ChannelMode == 3)

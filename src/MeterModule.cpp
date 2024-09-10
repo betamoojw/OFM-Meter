@@ -32,20 +32,8 @@ void MeterModule::loop()
 
 void MeterModule::processInputKo(GroupObject &ko)
 {
-    // we have to check first, if external KO are used
-    uint16_t asap = ko.asap();
-    switch (asap)
-    {
-        // case MTR_KoDayNight:
-        //     processInputKoDayNight(ko);
-        //     break;
-        default:
-            // forward to channel
-            int16_t channel = MTR_KoCalcChannel(asap);
-
-            if (channel >= 0) _channels[channel]->processInputKo(ko);
-            break;
-    }
+    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
+        _channels[i]->processInputKo(ko);
 }
 
 uint16_t MeterModule::flashSize()

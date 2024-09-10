@@ -18,10 +18,11 @@ class MeterChannel : public OpenKNX::Channel
     uint32_t _startTime = 0;
     uint32_t _lastTime = 0;
     uint8_t _mode = 0;
-    uint16_t _pulseDivider = 1;
+    float _outModifier = 1.0;
     bool _locked = false;
     bool _running = false;
     bool _afterStartup = false;
+    bool _firstRun = true;
 
     void sendOutput(bool send = true);
 

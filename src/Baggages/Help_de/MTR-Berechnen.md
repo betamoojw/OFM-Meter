@@ -1,4 +1,4 @@
-### Berechung
+﻿### Berechnen
 
 Beim Impulszähler besteht die Option, die Leistung bzw. den Durchfluss berechnen zu lassen. Hierbei wird die Zeit zwischen den Impulsen gemessen, und die Leistung bzw. der Durchfluss wird berechnet.
 
@@ -9,3 +9,4 @@ Dabei verhindert die Mindestwartezeit bei hoher Leistung bzw. Durchfluss, dass d
 #### Abbruchzeit
 
 Sollten keine Impulse mehr eintreffen, da der Verbrauch gerade 0 ist, wird der letzte Wert nicht mehr aktualisiert. Daher wird nach Ablauf der Abbruchzeit davon ausgegangen, dass gerade kein Verbrauch stattfindet, und es wird ein Wert von 0 für Leistung bzw. Durchfluss gesendet. Das Ganze ist ein prinzipbedingter Kompromiss, da ein Verbrauch von 0 nicht signalisiert werden kann.
+
