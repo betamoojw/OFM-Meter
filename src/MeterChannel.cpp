@@ -15,23 +15,23 @@ void MeterChannel::setup()
     if (!ParamMTR_ChannelMode) return;
 
     // Debug
-    logDebugP("ChannelMode: %u", ParamMTR_ChannelMode);
-    logDebugP("ChannelLock: %u", ParamMTR_ChannelLock);
-    logDebugP("ChannelInModifier: %f", ParamMTR_ChannelInModifier);
-    logDebugP("ChannelOutModifier: %f", ParamMTR_ChannelOutModifier);
-    logDebugP("ChannelInType: %u", ParamMTR_ChannelInType);
-    logDebugP("ChannelOutType: %u", ParamMTR_ChannelOutType);
-    logDebugP("ChannelDurationType: %u", ParamMTR_ChannelDurationType);
-    logDebugP("ChannelInFallback: %u", ParamMTR_ChannelInFallback);
-    logDebugP("ChannelInPulses: %u", ParamMTR_ChannelInPulses);
-    logDebugP("ChannelInDistance: %u", ParamMTR_ChannelInDistance);
-    logDebugP("ChannelIgnoreZero: %u", ParamMTR_ChannelIgnoreZero);
-    logDebugP("ChannelBackstop: %u", ParamMTR_ChannelBackstop);
-    logDebugP("ChannelPulseType: %u", ParamMTR_ChannelPulseType);
-    logDebugP("ChannelPulseCalculation: %u", ParamMTR_ChannelPulseCalculation);
-    logDebugP("ChannelCalcWaitTime: %u", ParamMTR_ChannelCalcWaitTime);
-    logDebugP("ChannelCalcAbortTime: %u", ParamMTR_ChannelCalcAbortTime);
-    logDebugP("ChannelSendOnChange: %u", ParamMTR_ChannelSendOnChange);
+    logTraceP("ChannelMode: %u", ParamMTR_ChannelMode);
+    logTraceP("ChannelLock: %u", ParamMTR_ChannelLock);
+    logTraceP("ChannelInModifier: %f", ParamMTR_ChannelInModifier);
+    logTraceP("ChannelOutModifier: %f", ParamMTR_ChannelOutModifier);
+    logTraceP("ChannelInType: %u", ParamMTR_ChannelInType);
+    logTraceP("ChannelOutType: %u", ParamMTR_ChannelOutType);
+    logTraceP("ChannelDurationType: %u", ParamMTR_ChannelDurationType);
+    logTraceP("ChannelInFallback: %u", ParamMTR_ChannelInFallback);
+    logTraceP("ChannelInPulses: %u", ParamMTR_ChannelInPulses);
+    logTraceP("ChannelInDistance: %u", ParamMTR_ChannelInDistance);
+    logTraceP("ChannelIgnoreZero: %u", ParamMTR_ChannelIgnoreZero);
+    logTraceP("ChannelBackstop: %u", ParamMTR_ChannelBackstop);
+    logTraceP("ChannelPulseType: %u", ParamMTR_ChannelPulseType);
+    logTraceP("ChannelPulseCalculation: %u", ParamMTR_ChannelPulseCalculation);
+    logTraceP("ChannelCalcWaitTime: %u", ParamMTR_ChannelCalcWaitTime);
+    logTraceP("ChannelCalcAbortTime: %u", ParamMTR_ChannelCalcAbortTime);
+    logTraceP("ChannelSendOnChange: %u", ParamMTR_ChannelSendOnChange);
 
     _mode = ParamMTR_ChannelMode;
     if (_mode == 0)
@@ -46,7 +46,7 @@ void MeterChannel::setup()
     }
     else if (_mode == 2)
     {
-        _outModifier = 1.0 / ParamMTR_ChannelInPulses;
+        _outModifier = ParamMTR_ChannelOutModifier / ParamMTR_ChannelInPulses;
         _reference = 0; // unused
     }
     else if (_mode == 3)

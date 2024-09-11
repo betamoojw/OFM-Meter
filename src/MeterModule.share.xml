@@ -53,7 +53,7 @@
               <ParameterType Id="%AID%_PT-PulseType" Name="PulseType">
                 <TypeRestriction Base="Value" SizeInBit="2">
                   <Enumeration Text="Individuell" Value="0" Id="%ENID%" />
-                  <Enumeration Text="Leistung (kWh)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Energie (kWh)" Value="1" Id="%ENID%" />
                   <Enumeration Text="Volumen (m³)" Value="2" Id="%ENID%" />
                 </TypeRestriction>
               </ParameterType>
