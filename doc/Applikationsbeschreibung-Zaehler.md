@@ -122,11 +122,6 @@ Ist die maximale Differenz mit 0 angegeben, so ist die Funktion deaktiviert.
 Einige Zähler liefern zu Beginn statt des korrekten Zählwerts eine 0. Um sicherzustellen, dass die Differenz zu 0 nicht gezählt wird, kann die 0 ignoriert werden.
 
 <!-- DOC -->
-### **Impulse je Einheit**
-
-Hier wird angegeben, wie viele Impulse eine Einheit repräsentieren. Viele Zähler arbeiten mit 1000 Impulsen je Einheit, was einem Impuls pro Wh oder Liter entspricht. Der genaue Wert steht in der Regel direkt auf dem Zähler.
-
-<!-- DOC -->
 ### **Senden bei Änderung**
 
 Hier kann angegeben werden, in welchem Abstand die Änderungen gesendet werden sollen.
@@ -138,9 +133,13 @@ Der Standardwert für den Impulszähler liegt bei 1000 (wie der Standardwert fü
 Alternativ kann mithilfe des Logikmoduls (Zeitschaltuhr) der Zählerstand mittels Read-Request auch zeitabhängig abgefragt und damit gesendet werden.
 
 <!-- DOC -->
-### **Berechnen**
+### **Berechnung**
 
 Beim Impulszähler besteht die Option, die Leistung bzw. den Durchfluss berechnen zu lassen. Hierbei wird die Zeit zwischen den Impulsen gemessen, und die Leistung bzw. der Durchfluss wird berechnet.
+
+#### Impulse je Einheit
+
+Hier wird angegeben, wie viele Impulse eine Einheit repräsentieren. Viele Zähler arbeiten mit 1000 Impulsen je Einheit, was einem Impuls pro Wh oder Liter entspricht. Der genaue Wert steht in der Regel direkt auf dem Zähler.
 
 #### Mindestwartezeit
 

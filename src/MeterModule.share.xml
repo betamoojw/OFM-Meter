@@ -52,9 +52,9 @@
               </ParameterType>
               <ParameterType Id="%AID%_PT-PulseType" Name="PulseType">
                 <TypeRestriction Base="Value" SizeInBit="2">
-                  <Enumeration Text="Individuell" Value="0" Id="%ENID%" />
-                  <Enumeration Text="Energie (kWh)" Value="1" Id="%ENID%" />
-                  <Enumeration Text="Volumen (m³)" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Inaktiv" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Leistung (W)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Durchfluss (l/h)" Value="2" Id="%ENID%" />
                 </TypeRestriction>
               </ParameterType>
               <ParameterType Id="%AID%_PT-MeterSendOnChange" Name="MeterSendOnChange">

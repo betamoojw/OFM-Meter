@@ -46,7 +46,7 @@ void MeterChannel::setup()
     }
     else if (_mode == 2)
     {
-        _outModifier = ParamMTR_ChannelOutModifier / ParamMTR_ChannelInPulses;
+        _outModifier = ParamMTR_ChannelOutModifier;
         _reference = 0; // unused
     }
     else if (_mode == 3)
@@ -68,7 +68,7 @@ void MeterChannel::loop()
         sendOutput(true);
     }
 
-    if (_mode == 2 && ParamMTR_ChannelPulseCalculation) loopPulse();
+    if (_mode == 2 && ParamMTR_ChannelPulseType) loopPulse();
     if (_mode == 3) loopTimer();
 
     if (_mode == 1 || _mode == 2)
@@ -182,7 +182,7 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
     {
         _counter++;
         logTraceP("Impuls counter %u (%f)", _counter, (float)_counter / ParamMTR_ChannelInPulses);
-        if (ParamMTR_ChannelPulseCalculation) pulse();
+        if (ParamMTR_ChannelPulseType) pulse();
     }
 
     // Counter

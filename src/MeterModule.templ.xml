@@ -25,7 +25,7 @@
               <Union SizeInBit="8">
                 <Memory CodeSegment="%MID%" Offset="24" BitOffset="0" />
                 <Parameter Id="%AID%_UP-%TT%%CC%100" Offset="0" BitOffset="0" Name="Channel%C%InType"       ParameterType="%AID%_PT-MeterType"         Text="Datentyp" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%101" Offset="0" BitOffset="0" Name="Channel%C%PulseType"    ParameterType="%AID%_PT-PulseType"         Text="Datentyp" Value="1" />
+                <Parameter Id="%AID%_UP-%TT%%CC%101" Offset="0" BitOffset="0" Name="Channel%C%PulseType"    ParameterType="%AID%_PT-PulseType"         Text="Formel" Value="0" />
                 <Parameter Id="%AID%_UP-%TT%%CC%200" Offset="0" BitOffset="4" Name="Channel%C%OutType"      ParameterType="%AID%_PT-MeterType"         Text="Datentyp" Value="1" />
                 <Parameter Id="%AID%_UP-%TT%%CC%201" Offset="0" BitOffset="4" Name="Channel%C%DurationType" ParameterType="%AID%_PT-MeterDurationType" Text="Datentyp" Value="0" />
               </Union>
@@ -36,7 +36,6 @@
                 <Parameter Id="%AID%_UP-%TT%%CC%902" Offset="0" BitOffset="4" Name="Channel%C%Lock"             ParameterType="%AID%_PT-MeterLock"  Text="Sperrobjekt" Value="0" />
                 <Parameter Id="%AID%_UP-%TT%%CC%111" Offset="1" BitOffset="0" Name="Channel%C%Backstop"         ParameterType="%AID%_PT-OnOffYesNo" Text="Rücklaufsperre" Value="1" />
                 <Parameter Id="%AID%_UP-%TT%%CC%112" Offset="1" BitOffset="1" Name="Channel%C%IgnoreZero"       ParameterType="%AID%_PT-OnOffYesNo" Text="Ignoriere 0" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%300" Offset="1" BitOffset="2" Name="Channel%C%PulseCalculation" ParameterType="%AID%_PT-OnOffYesNo" Text="Berechnen" Value="0" />
               </Union>
 
               <Union SizeInBit="48">
@@ -74,17 +73,14 @@
               <ParameterRef Id="%AID%_UP-%TT%%CC%100_R-%TT%%CC%10001" RefId="%AID%_UP-%TT%%CC%100" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" RefId="%AID%_UP-%TT%%CC%101" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%123_R-%TT%%CC%12301" RefId="%AID%_UP-%TT%%CC%123" />
-              <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" RefId="%AID%_UP-%TT%%CC%122" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" RefId="%AID%_UP-%TT%%CC%122" Text="Impulse je kWh" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" RefId="%AID%_UP-%TT%%CC%122" Text="Impulse je m³" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%112_R-%TT%%CC%11201" RefId="%AID%_UP-%TT%%CC%112" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%121_R-%TT%%CC%12101" RefId="%AID%_UP-%TT%%CC%121" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%111_R-%TT%%CC%11101" RefId="%AID%_UP-%TT%%CC%111" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%200_R-%TT%%CC%20001" RefId="%AID%_UP-%TT%%CC%200" />
-              <ParameterRef Id="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" RefId="%AID%_UP-%TT%%CC%300" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%201_R-%TT%%CC%20101" RefId="%AID%_UP-%TT%%CC%201" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20201" RefId="%AID%_UP-%TT%%CC%202" />
-              <ParameterRef Id="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20202" RefId="%AID%_UP-%TT%%CC%202" Value="1000" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%110_R-%TT%%CC%11001" RefId="%AID%_UP-%TT%%CC%110" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%210_R-%TT%%CC%21001" RefId="%AID%_UP-%TT%%CC%210" />
               <ParameterRef Id="%AID%_UP-%TT%%CC%210_R-%TT%%CC%21002" RefId="%AID%_UP-%TT%%CC%210" Value="0.001" />
@@ -225,38 +221,6 @@
                                 <ComObjectRefRef RefId="%AID%_O-%TT%%CC%000_R-%TT%%CC%00005" />
                               </when>
                             </choose>
-
-                            <!-- PulseTyp -->
-                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" IndentLevel="1" HelpContext="MTR-Datentyp-fuer-Impulsezaehler" />
-                              <choose ParamRefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101">
-                                <!-- Individuell -->
-                                <when test="0">
-                                  <!-- Einheit -->
-                                  <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" IndentLevel="1" HelpContext="%DOC%" />
-                                  <!-- je Einheit -->
-                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12201" IndentLevel="1" HelpContext="%DOC%" />
-                                </when>
-                                <!-- Leistung -->
-                                <when test="1">
-                                  <!-- je Einheit -->
-                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" IndentLevel="1" HelpContext="%DOC%" />
-
-                                  <!-- KO -->
-                                  <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
-                                    <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00203" /></when>
-                                  </choose>
-                                </when>
-                                <!-- Volumen -->
-                                <when test="2">
-                                  <!-- je Einheit -->
-                                  <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" IndentLevel="1" HelpContext="%DOC%" />
-
-                                  <!-- KO -->
-                                  <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
-                                    <when test="1"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00204" /></when>
-                                  </choose>
-                                </when>
-                              </choose>
                           </when>
 
                           <!-- bei Betriebsstunden -->
@@ -288,16 +252,7 @@
                             </choose>
 
                             <!-- Senden bei Änderung -->
-                            <choose ParamRefId="%AID%_UP-%TT%%CC%901_R-%TT%%CC%90101">
-                              <!-- bei Standard -->
-                              <when test="1">
-                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20201" IndentLevel="1" HelpContext="%DOC%" />
-                              </when>
-                              <!-- bei Impulse -->
-                              <when test="2">
-                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20202" IndentLevel="1" HelpContext="%DOC%" />
-                              </when>
-                            </choose>
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%202_R-%TT%%CC%20201" IndentLevel="1" HelpContext="%DOC%" />
                             <ParameterBlock Id="%AID%_PB-nnn" Name="ButtonsSendOnChange" Inline="true" Layout="Grid">
                               <Rows>
                                 <Row Id="%AID%_PB-nnn_R-1" Name="Row1" />
@@ -353,21 +308,33 @@
                           <when test="2">
                             <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
 
+                            <ParameterSeparator Id="%AID%_PS-nnn" Text="Berechnung" UIHint="Headline" />
+
+                            <!-- Berechnen / PulseTyp -->
+                            <ParameterRefRef RefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101" IndentLevel="1" HelpContext="MTR-Berechnung" />
                             <choose ParamRefId="%AID%_UP-%TT%%CC%101_R-%TT%%CC%10101">
-                              <when test=">0">
-                                <ParameterSeparator Id="%AID%_PS-nnn" Text="Leistung" UIHint="Headline" />
+                              <!-- Leistung -->
+                              <when test="1">
+                                <!-- je Einheit -->
+                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12202" IndentLevel="1" HelpContext="MTR-Berechnung" />
 
-                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001" IndentLevel="1" HelpContext="MTR-Berechnen" />
+                                <!-- KO -->
+                                <ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00203" />
+                              </when>
+                              <!-- Volumen -->
+                              <when test="2">
+                                <!-- je Einheit -->
+                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%122_R-%TT%%CC%12203" IndentLevel="1" HelpContext="MTR-Berechnung" />
 
-                                <!-- DoCalc -->
-                                <choose ParamRefId="%AID%_UP-%TT%%CC%300_R-%TT%%CC%30001">
-                                  <when test="1">
-                                    <!-- WaitTime -->
-                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" IndentLevel="1" HelpContext="MTR-Berechnen" />
-                                    <!-- AbortTime -->
-                                    <ParameterRefRef RefId="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" IndentLevel="1" HelpContext="MTR-Berechnen" />
-                                  </when>
-                                </choose>
+                                <!-- KO -->
+                                <ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00204" />
+                              </when>
+                              
+                              <when test="1 2">
+                                <!-- WaitTime -->
+                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%301_R-%TT%%CC%30101" IndentLevel="1" HelpContext="MTR-Berechnung" />
+                                <!-- AbortTime -->
+                                <ParameterRefRef RefId="%AID%_UP-%TT%%CC%302_R-%TT%%CC%30201" IndentLevel="1" HelpContext="MTR-Berechnung" />
                               </when>
                             </choose>
 
