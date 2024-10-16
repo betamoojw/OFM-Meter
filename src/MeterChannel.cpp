@@ -28,7 +28,6 @@ void MeterChannel::setup()
     logTraceP("ChannelIgnoreZero: %u", ParamMTR_ChannelIgnoreZero);
     logTraceP("ChannelBackstop: %u", ParamMTR_ChannelBackstop);
     logTraceP("ChannelPulseType: %u", ParamMTR_ChannelPulseType);
-    logTraceP("ChannelPulseCalculation: %u", ParamMTR_ChannelPulseCalculation);
     logTraceP("ChannelCalcWaitTime: %u", ParamMTR_ChannelCalcWaitTime);
     logTraceP("ChannelCalcAbortTime: %u", ParamMTR_ChannelCalcAbortTime);
     logTraceP("ChannelSendOnChange: %u", ParamMTR_ChannelSendOnChange);
@@ -66,6 +65,12 @@ void MeterChannel::loop()
         // after counter read from flash
         _firstRun = false;
         sendOutput(true);
+
+        if (_mode == 1 && !KoMTR_ChannelInput.initialized())
+            KoMTR_ChannelInput.requestObjectRead();
+
+        if (_mode == 2 && ParamMTR_ChannelPulseType && _calculationValue == 0)
+            processPulseCalculation(0, 0, 0);
     }
 
     if (_mode == 2 && ParamMTR_ChannelPulseType) loopPulse();
@@ -231,34 +236,39 @@ void MeterChannel::pulse()
 
 void MeterChannel::loopPulse()
 {
-    // if (openknx.common.afterStartupDelay() && !_afterStartup)
-    // {
-    //     sendOutput();
-
-    //     _afterStartup = true;
-    // }
-
-    if (_pulses > 0 && _startTime > 0)
+    // Verarbeitung läuft
+    if (_startTime > 0)
     {
-        // Wait time
-        if (delayCheck(_startTime, ParamMTR_ChannelCalcWaitTime * 1000)) pulseCalculate();
 
-        // Abort time
-        if (delayCheck(_startTime, ParamMTR_ChannelCalcAbortTime * 60000) && _calculationValue > 0) pulseCalculate();
+        if (delayCheck(_startTime, ParamMTR_ChannelCalcWaitTime * 1000)) pulseCalculate();
+        if (delayCheck(_startTime, ParamMTR_ChannelCalcAbortTime * 60000)) abortPulseCalculate();
     }
+}
+
+void MeterChannel::abortPulseCalculate()
+{
+    logTraceP("abortPulseCalculate");
+    logIndentUp();
+    const uint32_t duration = _lastTime - _startTime;
+    processPulseCalculation(0, duration, 0);
+    logIndentDown();
+    _startTime = 0;
+    _pulses = 0;
 }
 
 void MeterChannel::pulseCalculate()
 {
-    const uint32_t duration = _lastTime - _startTime;
+    if (!_pulses) return;
 
-    // Same result and consume same time
+    logTraceP("pulseCalculate");
+    logIndentUp();
+    const uint32_t duration = _lastTime - _startTime;
     _calculationValue = 3600000.0 / duration * _pulses * 1000 / ParamMTR_ChannelInPulses;
-    // _calculationValue = 1000.0 / (duration / (3600000.0 * _pulses / ParamMTR_ChannelInPulses));
 
     processPulseCalculation(_calculationValue, duration, _pulses);
     _startTime = _lastTime;
     _pulses = 0;
+    logIndentDown();
 }
 
 void MeterChannel::startTimer()

@@ -1,4 +1,4 @@
-# **SML**
+# **Zählermodul**
 
 <!-- DOC HelpContext="Dokumentation" -->
 

@@ -29,6 +29,7 @@ class MeterChannel : public OpenKNX::Channel
     void pulse();
     void loopPulse();
     void pulseCalculate();
+    void abortPulseCalculate();
     void processPulseCalculation(float value, uint32_t duration, uint32_t pulses);
 
     void loopTimer();
