@@ -20,7 +20,7 @@ class MeterChannel : public OpenKNX::Channel
     uint8_t _mode = 0;
     float _outModifier = 1.0;
     bool _locked = false;
-    bool _running = false;
+    // bool _running = false;
     bool _afterStartup = false;
     bool _firstRun = true;
 

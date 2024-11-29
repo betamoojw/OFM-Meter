@@ -50,7 +50,7 @@ void MeterChannel::setup()
     }
     else if (_mode == 3)
     {
-        _reference = 0; // unused
+        _reference = 0;
     }
 }
 
@@ -133,6 +133,12 @@ void MeterChannel::processInputKoLock(GroupObject &ko)
 {
     _locked = ko.value(DPT_Switch);
     logTraceP("processInputKoLock: %s", _locked ? "lock" : "unlock");
+
+    if (_mode == 3 && _locked)
+    {
+        processTimerCalculation();
+        stopTimer();
+    }
 }
 
 void MeterChannel::processInputKoInput(GroupObject &ko)
@@ -273,59 +279,55 @@ void MeterChannel::pulseCalculate()
 
 void MeterChannel::startTimer()
 {
+    if (_locked) return;
+    
     _lastTime = millis();
 
-    if (_running) return;
+    if (_startTime) return;
 
     logTraceP("Start timer");
     _startTime = _lastTime;
-    _running = true;
+    _reference = 0;
 }
 
 void MeterChannel::stopTimer()
 {
-    logTraceP("Stop timer");
+    if (!_startTime) return;
 
-    // process last second(s) with ceil
-    if (!_locked) _counter += ceil((millis() - _startTime) / 1000);
+    logTraceP("Stop timer");
 
     _startTime = 0;
     _lastTime = 0;
-    _running = false;
+    _reference = 0;
 
     sendOutput();
 }
 
 void MeterChannel::loopTimer()
 {
-    if (_running)
-    {
-        if (_lastTime && delayCheck(_lastTime, ParamMTR_ChannelInFallback * 1000))
-        {
-            logTraceP("Stop timer (Fallback)");
-            stopTimer();
-        }
+    if (!_startTime) return;
 
-        if (delayCheck(_startTime, 1000))
-        {
-            processTimerCalculation();
-        }
+    processTimerCalculation();
+
+    if (_lastTime && delayCheck(_lastTime, ParamMTR_ChannelInFallback * 1000))
+    {
+        logTraceP("Stop timer (Fallback)");
+        stopTimer();
     }
 }
 
 void MeterChannel::processTimerCalculation()
 {
-    uint8_t seconds = (millis() - _startTime) / 1000;
+    if (!_startTime) return;
+    
+    uint32_t duration = (millis() - _startTime) / 1000;
 
-    if (!seconds) return;
+    if (duration == _reference) return;
 
-    // move start time
-    _startTime += seconds * 1000;
+    _counter = _counter - _reference + duration;
+    _reference = duration;
 
-    // skip if locked and not add to counter
-    if (!_locked) _counter += seconds;
-
-    logTraceP("processTimerCalculation: %us (%us)", seconds, _counter);
+    logTraceP("processTimerCalculation: %us (%us)", _counter, _reference);
     sendOutput(false);
 }
 
@@ -414,7 +416,9 @@ void MeterChannel::printConsoleCounter()
 {
     if (!_mode) return;
 
-    if (counterTypeSigned() && referenceTypeSigned())
+    if (_mode == 3)
+        logInfoP("Counter %us", _counter);
+    else if (counterTypeSigned() && referenceTypeSigned())
         logInfoP("Counter %i - Reference %i", (int32_t)_counter, (int32_t)_reference);
     else if (counterTypeSigned() && !referenceTypeSigned())
         logInfoP("Counter %i - Reference %u", (int32_t)_counter, _reference);
