@@ -50,11 +50,15 @@ class MeterChannel : public OpenKNX::Channel
 
     void save();
     void restore();
+    uint8_t mode();
+    void reset(bool full = false);
 
+    uint8_t outType();
+    uint8_t outModifier();
     uint32_t counter();
     uint32_t reference();
     bool counterTypeSigned();
     bool referenceTypeSigned();
     void counter(uint32_t value);
-    void reset(bool full = false);
+
 };

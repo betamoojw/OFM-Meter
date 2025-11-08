@@ -19,6 +19,14 @@ void MeterModule::setup()
     }
 }
 
+MeterChannel *MeterModule::getChannel(uint8_t index)
+{
+    if (index >= ParamMTR_VisibleChannels)
+        return nullptr;
+
+    return _channels[index];
+}
+
 void MeterModule::loop()
 {
     if (ParamMTR_VisibleChannels == 0) return;

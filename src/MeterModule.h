@@ -15,6 +15,8 @@ class MeterModule : public OpenKNX::Module
     void showHelp() override;
     bool processCommand(const std::string command, bool diagnose) override;
     void processInputKo(GroupObject &ko) override;
+    
+    MeterChannel *getChannel(uint8_t index);
 
     const std::string name() override;
     const std::string version() override;

@@ -476,3 +476,18 @@ void MeterChannel::reset(bool full /*= false*/)
 
     sendOutput();
 }
+
+uint8_t MeterChannel::mode()
+{
+    return ParamMTR_ChannelMode;
+}
+
+uint8_t MeterChannel::outType()
+{
+    return ParamMTR_ChannelOutType;
+}
+
+uint8_t MeterChannel::outModifier()
+{
+    return ParamMTR_ChannelOutModifier;
+}
