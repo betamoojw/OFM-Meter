@@ -24,10 +24,10 @@
 
               <Union SizeInBit="8">
                 <Memory CodeSegment="%MID%" Offset="24" BitOffset="0" />
-                <Parameter Id="%AID%_UP-%TT%%CC%100" Offset="0" BitOffset="0" Name="Channel%C%InType"       ParameterType="%AID%_PT-MeterType"         Text="Datentyp" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%101" Offset="0" BitOffset="0" Name="Channel%C%PulseType"    ParameterType="%AID%_PT-PulseType"         Text="Formel" Value="0" />
-                <Parameter Id="%AID%_UP-%TT%%CC%200" Offset="0" BitOffset="4" Name="Channel%C%OutType"      ParameterType="%AID%_PT-MeterType"         Text="Datentyp" Value="1" />
-                <Parameter Id="%AID%_UP-%TT%%CC%201" Offset="0" BitOffset="4" Name="Channel%C%DurationType" ParameterType="%AID%_PT-MeterDurationType" Text="Datentyp" Value="0" />
+                <Parameter Id="%AID%_UP-%TT%%CC%100" Offset="0" BitOffset="0" Name="Channel%C%InType"       ParameterType="%AID%_PT-MeterType"         Text="Datentyp" Value="1" op:nowarn="true" />
+                <Parameter Id="%AID%_UP-%TT%%CC%101" Offset="0" BitOffset="0" Name="Channel%C%PulseType"    ParameterType="%AID%_PT-PulseType"         Text="Formel" Value="0" op:nowarn="true" />
+                <Parameter Id="%AID%_UP-%TT%%CC%200" Offset="0" BitOffset="4" Name="Channel%C%OutType"      ParameterType="%AID%_PT-MeterType"         Text="Datentyp" Value="1" op:nowarn="true" />
+                <Parameter Id="%AID%_UP-%TT%%CC%201" Offset="0" BitOffset="4" Name="Channel%C%DurationType" ParameterType="%AID%_PT-MeterDurationType" Text="Datentyp" Value="0" op:nowarn="true" />
               </Union>
 
               <Union SizeInBit="16">

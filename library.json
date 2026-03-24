@@ -1,6 +1,6 @@
 {
   "name": "OFM-Meter",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "dependencies": {},
   "description": "A counter module to enable different counters including conversion.",
   "homepage": "https://openknx.de",
