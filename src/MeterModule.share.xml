@@ -8,7 +8,7 @@
         <ApplicationProgram>
           <Static>
             <ParameterTypes>
-              <ParameterType Id="%AID%_PT-MTRNumChannels" Name="BTNNumChannels">
+              <ParameterType Id="%AID%_PT-MTRNumChannels" Name="MTRNumChannels">
                 <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="1" maxInclusive="%N%" />
               </ParameterType>
               <ParameterType Id="%AID%_PT-ValueDpt7Min1" Name="ValueDpt7Min1">
