@@ -1,4 +1,7 @@
 #include "MeterModule.h"
+#ifdef OPENKNX_WEBSERVER
+    #include <NetworkModule.h>
+#endif
 
 const std::string MeterModule::name()
 {
@@ -17,6 +20,76 @@ void MeterModule::setup()
         _channels[i] = new MeterChannel(i);
         _channels[i]->setup();
     }
+
+#ifdef OPENKNX_WEBSERVER
+    if (knx.configured())
+    {
+        openknxNetwork.webserver.addMenuItem("Z\u00e4hlermodul", "/meter");
+        openknxNetwork.webserver.addRoute(OpenKNX::Network::WEB_GET, "/meter", [](OpenKNX::Network::WebRequest& /*req*/, OpenKNX::Network::WebResponse& res) {
+            if (!knx.configured())
+            {
+                res.setStatus(404);
+                res.send("");
+                return;
+            }
+
+            std::string html = "<h1>Z&auml;hlermodul</h1><h2>Kan&auml;le</h2>";
+            html += "<table><thead><tr>"
+                    "<th>Kanal</th><th>Modus</th><th>Interner Z&auml;hler</th><th>Referenzz&auml;hler</th>"
+                    "</tr></thead><tbody>";
+
+            for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
+            {
+                MeterChannel* ch = openknxMeterModule.getChannel(i);
+
+                html += "<tr><td>Kanal ";
+                html += std::to_string(i + 1);
+                html += "</td><td>";
+
+                if (!ch || !ch->mode())
+                {
+                    html += "Unkonfiguriert</td><td>&mdash;</td><td>&mdash;</td></tr>";
+                    continue;
+                }
+
+                switch (ch->mode())
+                {
+                    case 1: html += "Standardz&auml;hler"; break;
+                    case 2: html += "Impulsz&auml;hler";   break;
+                    case 3: html += "Zeitz&auml;hler";      break;
+                    default: html += "&mdash;";              break;
+                }
+
+                html += "</td><td>";
+                uint32_t counter = ch->counter();
+                if (ch->counterTypeSigned())
+                    html += std::to_string((int32_t)counter);
+                else
+                    html += std::to_string(counter);
+
+                html += "</td><td>";
+                if (ch->mode() == 1)
+                {
+                    uint32_t reference = ch->reference();
+                    if (ch->referenceTypeSigned())
+                        html += std::to_string((int32_t)reference);
+                    else
+                        html += std::to_string(reference);
+                }
+                else
+                {
+                    html += "&mdash;";
+                }
+
+                html += "</td></tr>";
+            }
+
+            html += "</tbody></table>";
+            res.setLayout(true);
+            res.send(html.c_str());
+        });
+    }
+#endif
 }
 
 MeterChannel *MeterModule::getChannel(uint8_t index)
