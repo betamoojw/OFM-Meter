@@ -33,7 +33,7 @@ void MeterModule::setup()
                 return;
             }
 
-            std::string html = "<h1>Z&auml;hlermodul</h1><h2>Kan&auml;le</h2>";
+            std::string html = "<div class='container'><h1>Z&auml;hlermodul</h1><h2>Kan&auml;le</h2>";
             html += "<table><thead><tr>"
                     "<th>Kanal</th><th>Modus</th><th>Interner Z&auml;hler</th><th>Referenzz&auml;hler</th>"
                     "</tr></thead><tbody>";
@@ -84,7 +84,7 @@ void MeterModule::setup()
                 html += "</td></tr>";
             }
 
-            html += "</tbody></table>";
+            html += "</tbody></table></div>";
             res.setLayout(true);
             res.send(html.c_str());
         });
