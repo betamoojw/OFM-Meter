@@ -1,5 +1,5 @@
 #include "MeterModule.h"
-#ifdef OPENKNX_WEBSERVER
+#if defined(OPENKNX_WEBSERVER) && (defined(KNX_IP_LAN) || defined(KNX_IP_WIFI))
     #include <NetworkModule.h>
 #endif
 
@@ -21,7 +21,7 @@ void MeterModule::setup()
         _channels[i]->setup();
     }
 
-#ifdef OPENKNX_WEBSERVER
+#if defined(OPENKNX_WEBSERVER) && (defined(KNX_IP_LAN) || defined(KNX_IP_WIFI))
     if (knx.configured())
     {
         openknxNetwork.webserver.addMenuItem("Z\u00e4hlermodul", "/meter");
