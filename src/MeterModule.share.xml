@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-model href="../../Organization/knxprod-support/knx_project_20/knx-editor.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <KNX xmlns:op="http://github.com/OpenKNX/OpenKNXproducer" xmlns="http://knx.org/xml/project/20" CreatedBy="KNX MT" ToolVersion="5.1.255.16695">
-  <op:config name="%MTR_NumChannelsDefault%" value="%N%" />
   <ManufacturerData>
     <Manufacturer>
       <ApplicationPrograms>
@@ -9,7 +8,7 @@
           <Static>
             <ParameterTypes>
               <ParameterType Id="%AID%_PT-MTRNumChannels" Name="MTRNumChannels">
-                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="1" maxInclusive="%N%" />
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="%N%" maxInclusive="%N%" />
               </ParameterType>
               <ParameterType Id="%AID%_PT-ValueDpt7Min1" Name="ValueDpt7Min1">
                 <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="1" maxInclusive="65535" />
@@ -29,7 +28,14 @@
               </ParameterType>
               <ParameterType Id="%AID%_PT-MeterMode" Name="MeterMode">
                 <TypeRestriction Base="Value" SizeInBit="4">
-                  <Enumeration Text="Deaktviert" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Deaktiviert" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Standardzähler" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Impulszähler" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Betriebsstundenzähler" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-MeterModeSelect" Name="MeterModeSelect">
+                <TypeRestriction Base="Value" SizeInBit="4">
                   <Enumeration Text="Standardzähler" Value="1" Id="%ENID%" />
                   <Enumeration Text="Impulszähler" Value="2" Id="%ENID%" />
                   <Enumeration Text="Betriebsstundenzähler" Value="3" Id="%ENID%" />
@@ -52,7 +58,7 @@
               </ParameterType>
               <ParameterType Id="%AID%_PT-PulseType" Name="PulseType">
                 <TypeRestriction Base="Value" SizeInBit="2">
-                  <Enumeration Text="Inaktiv" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Deaktiviert" Value="0" Id="%ENID%" />
                   <Enumeration Text="Leistung (W)" Value="1" Id="%ENID%" />
                   <Enumeration Text="Durchfluss (l/h)" Value="2" Id="%ENID%" />
                 </TypeRestriction>
@@ -71,7 +77,7 @@
             <Parameters>
               <Union SizeInBit="8">
                 <Memory CodeSegment="%AID%_RS-04-00000" Offset="0" BitOffset="0" />
-                <Parameter Id="%AID%_UP-%TT%00001" Name="VisibleChannels" Offset="0" BitOffset="0" ParameterType="%AID%_PT-MTRNumChannels"  Text="Verfügbare Kanäle" Value="%MTR_NumChannelsDefault%" SuffixText=" von %N%" />
+                <Parameter Id="%AID%_UP-%TT%00001" Name="VisibleChannels" Offset="0" BitOffset="0" ParameterType="%AID%_PT-MTRNumChannels" Text="Verfügbare Kanäle" Value="%N%" Access="None" />
               </Union>
             </Parameters>
             <ParameterRefs>
@@ -83,7 +89,7 @@
             </ComObjectRefs>
             <Script>
               <op:include href="Meter.script.js" prefix="MTR" type="script" />
-            </Script>  
+            </Script>
           </Static>
           <Dynamic>
 
@@ -92,23 +98,28 @@
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="Zählermodul" UIHint="Headline" />
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="Version: %ModuleVersion%" />
                 <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
-                <!-- Verfuegbare-Kanaele -->
-                <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
-                <ParameterRefRef RefId="%AID%_UP-%TT%00001_R-%TT%0000101" HelpContext="BASE-Verfuegbare-Kanaele" IndentLevel="1" />
-                <ParameterSeparator Id="%AID%_PS-nnn" Text="" UIHint="HorizontalRuler" />
               </ParameterBlock>
 
-              <op:include href="MeterModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="MTR" IsInner="true" />
+              <ParameterBlock Id="%AID%_PB-nnn" Name="MTRKanalauswahl" Text="Kanalauswahl" Icon="format-list-bulleted-type" HelpContext="MTR-Dokumentation">
+                <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
+                <ParameterBlock Id="%AID%_PB-nnn" Inline="true" Layout="Grid">
+                  <Rows>
+                    <Row Id="%AID%_PB-nnn_R-1" />
+                  </Rows>
+                  <Columns>
+                    <Column Id="%AID%_PB-nnn_C-1" Width="13%" />
+                    <Column Id="%AID%_PB-nnn_C-2" Width="30%" />
+                    <Column Id="%AID%_PB-nnn_C-3" Width="57%" />
+                  </Columns>
+                  <ParameterSeparator Id="%AID%_PS-nnn" Cell="1,1" UIHint="Headline" Text="Kanal" />
+                  <ParameterSeparator Id="%AID%_PS-nnn" Cell="1,2" UIHint="Headline" Text="Zählertyp" />
+                  <ParameterSeparator Id="%AID%_PS-nnn" Cell="1,3" UIHint="Headline" Text="Beschreibung" />
+                </ParameterBlock>
+                <op:include href="MeterModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/ParameterBlock[@Name='Settings']/*" type="template" prefix="MTR" IsInner="true" />
+              </ParameterBlock>
 
-              <!-- followed by all channels -->
-              <choose ParamRefId="%AID%_UP-%TT%00001_R-%TT%0000101">
-                <when test="&lt;%N%">
-                  <ParameterBlock Id="%AID%_PB-nnn" Name="fAdditionalChannels" Text="(mehr)" Icon="dots-horizontal" HelpContext="Empty">
-                    <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
-                    <ParameterRefRef RefId="%AID%_UP-%TT%00001_R-%TT%0000101" HelpContext="BASE-Verfuegbare-Kanaele" IndentLevel="1" />
-                  </ParameterBlock>
-                </when>
-              </choose>
+              <op:include href="MeterModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/ParameterBlock[@Name='Channel']/*" type="template" prefix="MTR" IsInner="true" />
+
             </Channel>
           </Dynamic>
         </ApplicationProgram>
