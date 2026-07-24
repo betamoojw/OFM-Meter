@@ -7,9 +7,6 @@
         <ApplicationProgram>
           <Static>
             <ParameterTypes>
-              <ParameterType Id="%AID%_PT-MTRNumChannels" Name="MTRNumChannels">
-                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="%N%" maxInclusive="%N%" />
-              </ParameterType>
               <ParameterType Id="%AID%_PT-ValueDpt7Min1" Name="ValueDpt7Min1">
                 <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="1" maxInclusive="65535" />
               </ParameterType>
@@ -75,13 +72,8 @@
               </ParameterType>
             </ParameterTypes>
             <Parameters>
-              <Union SizeInBit="8">
-                <Memory CodeSegment="%AID%_RS-04-00000" Offset="0" BitOffset="0" />
-                <Parameter Id="%AID%_UP-%TT%00001" Name="VisibleChannels" Offset="0" BitOffset="0" ParameterType="%AID%_PT-MTRNumChannels" Text="Verfügbare Kanäle" Value="%N%" Access="None" />
-              </Union>
             </Parameters>
             <ParameterRefs>
-              <ParameterRef Id="%AID%_UP-%TT%00001_R-%TT%0000101" RefId="%AID%_UP-%TT%00001" />
             </ParameterRefs>
             <ComObjectTable>
             </ComObjectTable>
@@ -101,7 +93,6 @@
               </ParameterBlock>
 
               <ParameterBlock Id="%AID%_PB-nnn" Name="MTRKanalauswahl" Text="Kanalauswahl" Icon="format-list-bulleted-type" HelpContext="MTR-Dokumentation">
-                <ParameterSeparator Id="%AID%_PS-nnn" Text="Kanalauswahl" UIHint="Headline" />
                 <ParameterBlock Id="%AID%_PB-nnn" Inline="true" Layout="Grid">
                   <Rows>
                     <Row Id="%AID%_PB-nnn_R-1" />

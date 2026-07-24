@@ -15,11 +15,22 @@ const std::string MeterModule::version()
 
 void MeterModule::setup()
 {
-    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
+    uint8_t active = 0;
+    for (uint8_t i = 0; i < MTR_ChannelCount; i++)
     {
-        _channels[i] = new MeterChannel(i);
-        _channels[i]->setup();
+        MeterChannel* ch = new MeterChannel(i);
+        if (ch->isActive())
+        {
+            _channels[i] = ch;
+            _channels[i]->setup();
+            active++;
+        }
+        else
+        {
+            delete ch;
+        }
     }
+    logInfoP("Setup completed with %u/%u channels active", active, MTR_ChannelCount);
 
 #if defined(OPENKNX_WEBSERVER) && (defined(KNX_IP_LAN) || defined(KNX_IP_WIFI))
     if (knx.configured())
@@ -38,7 +49,7 @@ void MeterModule::setup()
                     "<th>Kanal</th><th>Modus</th><th>Interner Z&auml;hler</th><th>Referenzz&auml;hler</th>"
                     "</tr></thead><tbody>";
 
-            for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
+            for (uint8_t i = 0; i < MTR_ChannelCount; i++)
             {
                 MeterChannel* ch = openknxMeterModule.getChannel(i);
 
@@ -94,7 +105,7 @@ void MeterModule::setup()
 
 MeterChannel *MeterModule::getChannel(uint8_t index)
 {
-    if (index >= ParamMTR_VisibleChannels)
+    if (index >= MTR_ChannelCount)
         return nullptr;
 
     return _channels[index];
@@ -102,25 +113,25 @@ MeterChannel *MeterModule::getChannel(uint8_t index)
 
 void MeterModule::loop()
 {
-    if (ParamMTR_VisibleChannels == 0) return;
-
     uint8_t processed = 0;
     do
-        _channels[_currentChannel]->loop();
-
-    while (openknx.freeLoopIterate(ParamMTR_VisibleChannels, _currentChannel, processed));
+    {
+        if (_channels[_currentChannel] != nullptr)
+            _channels[_currentChannel]->loop();
+    }
+    while (openknx.freeLoopIterate(MTR_ChannelCount, _currentChannel, processed));
 }
 
 void MeterModule::processInputKo(GroupObject &ko)
 {
-    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
-        _channels[i]->processInputKo(ko);
+    for (uint8_t i = 0; i < MTR_ChannelCount; i++)
+        if (_channels[i] != nullptr) _channels[i]->processInputKo(ko);
 }
 
 uint16_t MeterModule::flashSize()
 {
     // Version + Data (Channel * Inputs * (Dpt + Value))
-    return 1 + (ParamMTR_VisibleChannels * 8);
+    return 1 + (MTR_ChannelCount * 8);
 }
 
 void MeterModule::readFlash(const uint8_t *buffer, const uint16_t size)
@@ -136,19 +147,25 @@ void MeterModule::readFlash(const uint8_t *buffer, const uint16_t size)
     }
 
     uint8_t savedChannels = (size - 1) / 8;
-    logDebugP("Reading channel data from flash (%i/%i)", savedChannels, ParamMTR_VisibleChannels);
-    for (uint8_t i = 0; i < MIN(savedChannels, ParamMTR_VisibleChannels); i++)
+    logDebugP("Reading channel data from flash (%i/%i)", savedChannels, MTR_ChannelCount);
+    for (uint8_t i = 0; i < MIN(savedChannels, MTR_ChannelCount); i++)
     {
-        _channels[i]->restore();
+        if (_channels[i] != nullptr)
+            _channels[i]->restore();
+        else
+            for (uint8_t j = 0; j < 8; j++) openknx.flash.readByte();
     }
 }
 
 void MeterModule::writeFlash()
 {
     openknx.flash.writeByte(1); // Version
-    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
+    for (uint8_t i = 0; i < MTR_ChannelCount; i++)
     {
-        _channels[i]->save();
+        if (_channels[i] != nullptr)
+            _channels[i]->save();
+        else
+            for (uint8_t j = 0; j < 8; j++) openknx.flash.writeByte(0);
     }
 }
 
@@ -166,8 +183,8 @@ bool MeterModule::processCommand(const std::string command, bool diagnose)
     logInfoP("Show internal counter");
     logIndentUp();
 
-    for (uint8_t i = 0; i < ParamMTR_VisibleChannels; i++)
-        _channels[i]->printConsoleCounter();
+    for (uint8_t i = 0; i < MTR_ChannelCount; i++)
+        if (_channels[i] != nullptr) _channels[i]->printConsoleCounter();
 
     logIndentDown();
     return true;
@@ -184,6 +201,7 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
         case 1:
         {
             uint8_t channel = data[1];
+            if (channel >= MTR_ChannelCount || _channels[channel] == nullptr) return false;
             uint32_t counter = _channels[channel]->counter();
             bool counterSigned = _channels[channel]->counterTypeSigned();
             // counter = (int32_t)-2147483648;

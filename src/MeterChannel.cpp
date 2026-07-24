@@ -10,6 +10,11 @@ const std::string MeterChannel::name()
     return "Meter";
 }
 
+bool MeterChannel::isActive()
+{
+    return ParamMTR_ChannelMode > 0;
+}
+
 void MeterChannel::setup()
 {
     if (!ParamMTR_ChannelMode) return;

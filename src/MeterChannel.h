@@ -50,6 +50,7 @@ class MeterChannel : public OpenKNX::Channel
 
     void save();
     void restore();
+    bool isActive();
     uint8_t mode();
     void reset(bool full = false);
 

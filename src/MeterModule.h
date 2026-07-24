@@ -6,7 +6,7 @@ class MeterModule : public OpenKNX::Module
 {
 
   protected:
-    MeterChannel *_channels[MTR_ChannelCount];
+    MeterChannel *_channels[MTR_ChannelCount] = {};
     uint8_t _currentChannel = 0;
 
   public:
