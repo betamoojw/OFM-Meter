@@ -48,7 +48,7 @@
               <Union SizeInBit="32">
                 <Memory CodeSegment="%MID%" Offset="54" BitOffset="0" />
                 <Parameter Id="%AID%_UP-%TT%%CC%301" Offset="0"  BitOffset="0" Name="Channel%C%CalcWaitTime"  ParameterType="%AID%_PT-ValueDpt7Min1" Text="Mindestwartezeit" Value="15" SuffixText="s" />
-                <Parameter Id="%AID%_UP-%TT%%CC%302" Offset="2"  BitOffset="0" Name="Channel%C%CalcAbortTime" ParameterType="%AID%_PT-ValueDpt7Min1" Text="Abbruchzeit" Value="10" SuffixText="m" />
+                <Parameter Id="%AID%_UP-%TT%%CC%302" Offset="2"  BitOffset="0" Name="Channel%C%CalcAbortTime" ParameterType="%AID%_PT-MeterCalcAbortTime" Text="Abbruchzeit" Value="10" SuffixText="m" />
               </Union>
 
               <Union SizeInBit="16">

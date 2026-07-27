@@ -10,6 +10,11 @@
               <ParameterType Id="%AID%_PT-ValueDpt7Min1" Name="ValueDpt7Min1">
                 <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="1" maxInclusive="65535" />
               </ParameterType>
+              <!-- Abbruchzeit der Impulsberechnung in Minuten. Die Obergrenze hält das
+                   Produkt mit 60000 innerhalb von int. -->
+              <ParameterType Id="%AID%_PT-MeterCalcAbortTime" Name="MeterCalcAbortTime">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="1" maxInclusive="120" />
+              </ParameterType>
               <ParameterType Id="%AID%_PT-ValueDpt12Min1" Name="ValueDpt12Min1">
                 <TypeNumber SizeInBit="32" Type="unsignedInt" minInclusive="1" maxInclusive="4294967295" />
               </ParameterType>
