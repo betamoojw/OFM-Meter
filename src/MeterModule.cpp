@@ -195,6 +195,7 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
     if (!knx.configured()) return false;
     if (objectIndex != 160) return false;
     if (propertyId != 2) return false;
+    if (length < 2) return false; // action and channel
 
     switch (data[0])
     {
@@ -234,6 +235,8 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
         }
         case 2:
         {
+            if (length < 3) return false; // plus the full flag
+
             uint8_t channel = data[1];
             if (channel >= MTR_ChannelCount || _channels[channel] == nullptr) return false;
 
@@ -245,6 +248,8 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
         }
         case 3:
         {
+            if (length < 7) return false; // plus the sign flag and 4 counter bytes
+
             uint8_t channel = data[1];
             if (channel >= MTR_ChannelCount || _channels[channel] == nullptr) return false;
 
