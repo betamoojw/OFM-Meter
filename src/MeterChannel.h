@@ -22,8 +22,6 @@ class MeterChannel : public OpenKNX::Channel
     // 16,7 Mio. runden. Bei Multiplikator 1 muss ein uint32_t unverändert durchlaufen.
     double _outModifier = 1.0;
     bool _locked = false;
-    // bool _running = false;
-    bool _afterStartup = false;
     bool _firstRun = true;
 
     void sendOutput(bool send = true);
@@ -57,7 +55,7 @@ class MeterChannel : public OpenKNX::Channel
     void reset(bool full = false);
 
     uint8_t outType();
-    uint8_t outModifier();
+    double outModifier();
     uint32_t counter();
     uint32_t reference();
     bool counterTypeSigned();

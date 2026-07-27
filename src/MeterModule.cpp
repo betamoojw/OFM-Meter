@@ -130,7 +130,7 @@ void MeterModule::processInputKo(GroupObject &ko)
 
 uint16_t MeterModule::flashSize()
 {
-    // Version + Data (Channel * Inputs * (Dpt + Value))
+    // Version + je Kanal Zähler und Referenz als uint32_t
     return 1 + (MTR_ChannelCount * 8);
 }
 

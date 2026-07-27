@@ -38,13 +38,7 @@ void MeterChannel::setup()
     logTraceP("ChannelSendOnChange: %u", ParamMTR_ChannelSendOnChange);
 
     _mode = ParamMTR_ChannelMode;
-    if (_mode == 0)
-    {
-        // Reset
-        _counter = 0;
-        _reference = 0;
-    }
-    else if (_mode == 1)
+    if (_mode == 1)
     {
         _outModifier = ParamMTR_ChannelOutModifier;
     }
@@ -101,7 +95,6 @@ void MeterChannel::processInputKo(GroupObject &ko)
 
     uint16_t koNumber = ko.asap();
     int8_t koIndex = MTR_KoCalcIndex(koNumber);
-    // logInfoP("koNumber %i -> koIndex %i", koNumber, koIndex);
 
     // External KO -> to Channel Mapping
     if (ParamMTR_ChannelInSourceKo > 0 && ParamMTR_ChannelInSourceKo == koNumber)
@@ -374,8 +367,6 @@ void MeterChannel::restore()
     uint32_t counter = openknx.flash.readInt();
     uint32_t reference = openknx.flash.readInt();
 
-    if (!ParamMTR_ChannelMode) return;
-
     logDebugP("Restore counter %u reference %u", counter, reference);
 
     _counter = counter;
@@ -526,7 +517,7 @@ uint8_t MeterChannel::outType()
     return ParamMTR_ChannelOutType;
 }
 
-uint8_t MeterChannel::outModifier()
+double MeterChannel::outModifier()
 {
     return ParamMTR_ChannelOutModifier;
 }
