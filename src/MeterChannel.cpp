@@ -136,7 +136,12 @@ void MeterChannel::processInputKoReset(GroupObject &ko)
 
 void MeterChannel::processInputKoLock(GroupObject &ko)
 {
-    _locked = ko.value(DPT_Switch);
+    if (!ParamMTR_ChannelLock) return;
+
+    // ParamMTR_ChannelLock: 1 = gesperrt bei 1, 2 = gesperrt bei 0
+    const bool koValue = ko.value(DPT_Switch);
+    _locked = (ParamMTR_ChannelLock == 2) ? !koValue : koValue;
+
     logTraceP("processInputKoLock: %s", _locked ? "lock" : "unlock");
 
     if (_mode == 3 && _locked)
@@ -177,6 +182,16 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
         }
 
         if (diff == 0) return;
+
+        // Gesperrt wird nur das Erhöhen des Zählers. Die Referenz oben läuft weiter mit,
+        // damit die während der Sperre gezählten Einheiten nicht nachträglich aufsummiert
+        // werden, sobald wieder entsperrt wurde.
+        if (_locked)
+        {
+            logTraceP("Locked, counter not increased");
+            return;
+        }
+
         if (ParamMTR_ChannelBackstop && diff < 0) return;
         if (ParamMTR_ChannelInDistance > 0 && ParamMTR_ChannelInDistance < abs(diff)) return;
         if (value == 0 && ParamMTR_ChannelIgnoreZero) return;
