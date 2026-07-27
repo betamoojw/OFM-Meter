@@ -18,7 +18,9 @@ class MeterChannel : public OpenKNX::Channel
     uint32_t _startTime = 0;
     uint32_t _lastTime = 0;
     uint8_t _mode = 0;
-    float _outModifier = 1.0;
+    // double, nicht float: float hat 24 Bit Mantisse und würde Zählerstände über
+    // 16,7 Mio. runden. Bei Multiplikator 1 muss ein uint32_t unverändert durchlaufen.
+    double _outModifier = 1.0;
     bool _locked = false;
     // bool _running = false;
     bool _afterStartup = false;
