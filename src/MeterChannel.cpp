@@ -389,27 +389,34 @@ void MeterChannel::sendOutput(bool send /* = true */)
 
     if (ParamMTR_ChannelMode == 1 || ParamMTR_ChannelMode == 2)
     {
+        // Der Zähler ist ein 32-Bit-Register, counterTypeSigned() entscheidet über die
+        // Leseart. Das muss vor der Multiplikation passieren: bei einem ganzzahligen
+        // Modifikator stellen die Ganzzahl-DPTs das Vorzeichen über die Modulo-Verengung
+        // noch selbst wieder her, bei einem Bruch ist diese Beziehung zerstört. DPT 14
+        // hat gar keine Verengung und braucht es immer.
+        const double out = (counterTypeSigned() ? (double)(int32_t)_counter : (double)_counter) * _outModifier;
+
         // DPT 12.xxx
         if (ParamMTR_ChannelOutType == 0)
             if (send)
-                KoMTR_ChannelOutput.value(_counter * _outModifier, DPT_Value_4_Ucount);
+                KoMTR_ChannelOutput.value(out, DPT_Value_4_Ucount);
             else
-                KoMTR_ChannelOutput.valueNoSend(_counter * _outModifier, DPT_Value_4_Ucount);
+                KoMTR_ChannelOutput.valueNoSend(out, DPT_Value_4_Ucount);
 
         // DPT 13.xxx
         else if (ParamMTR_ChannelOutType == 1)
             if (send)
-                KoMTR_ChannelOutput.value(_counter * _outModifier, DPT_Value_4_Count);
+                KoMTR_ChannelOutput.value(out, DPT_Value_4_Count);
             else
-                KoMTR_ChannelOutput.valueNoSend(_counter * _outModifier, DPT_Value_4_Count);
+                KoMTR_ChannelOutput.valueNoSend(out, DPT_Value_4_Count);
 
         // DPT 14.xxx
         else if (ParamMTR_ChannelOutType == 2)
         {
             if (send)
-                KoMTR_ChannelOutput.value((float)_counter * _outModifier, DPT_Value_Amplitude);
+                KoMTR_ChannelOutput.value(out, DPT_Value_Amplitude);
             else
-                KoMTR_ChannelOutput.valueNoSend((float)_counter * _outModifier, DPT_Value_Amplitude);
+                KoMTR_ChannelOutput.valueNoSend(out, DPT_Value_Amplitude);
         }
     }
     else if (ParamMTR_ChannelMode == 3)
