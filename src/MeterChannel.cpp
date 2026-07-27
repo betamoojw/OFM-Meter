@@ -154,31 +154,43 @@ void MeterChannel::processInputKoLock(GroupObject &ko)
 void MeterChannel::processInputKoInput(GroupObject &ko)
 {
     uint32_t value = 0;
-    int32_t diff = 0;
+    int64_t diff = 0;
 
     // Counter
     if (_mode == 1)
     {
-        // DPT 12.xxx
+        // Der Modifikator gehört zur Eingangsumrechnung, gespeichert wird der skalierte
+        // Wert. llround, weil ein DPT-14-Float den Dezimalwert nie exakt trifft: 123,987
+        // liegt als float bei 123,98699954 und würde mit *1000 zu 123986 abgeschnitten.
+        // Der Zwischenschritt über int64_t hält die Konvertierung definiert und
+        // lässt einen Überlauf vorne wieder anfangen, statt undefiniert zu sättigen.
+        // diff wird aus den beiden gespeicherten 32-Bit-Werten gebildet, damit beide
+        // Operanden im selben Wertebereich liegen, und ist als echte Differenz breiter
+        // als int32_t: ein Schritt von 0 auf UINT32_MAX passt dort nicht hinein.
+
+        // DPT 12.xxx, vorzeichenlos
         if (ParamMTR_ChannelInType == 0)
         {
-            value = (uint32_t)ko.value(DPT_Value_4_Ucount) * ParamMTR_ChannelInModifier;
-            diff = (value - _reference);
+            const int64_t scaled = llround((uint32_t)ko.value(DPT_Value_4_Ucount) * ParamMTR_ChannelInModifier);
+            value = (uint32_t)scaled;
+            diff = (int64_t)value - (int64_t)_reference;
             _reference = value;
-            logTraceP("New reference %u (diff %i)", _reference, diff);
+            logTraceP("New reference %u (diff %s%u)", _reference, diff < 0 ? "-" : "", (uint32_t)llabs(diff));
         }
 
-        // DPT 13.xxx && DPT 14.xxx
+        // DPT 13.xxx && DPT 14.xxx, vorzeichenbehaftet
         else if (ParamMTR_ChannelInType == 1 || ParamMTR_ChannelInType == 2)
         {
+            int64_t scaled;
             if (ParamMTR_ChannelInType == 1)
-                value = (int32_t)ko.value(DPT_Value_4_Count) * ParamMTR_ChannelInModifier;
+                scaled = llround((int32_t)ko.value(DPT_Value_4_Count) * ParamMTR_ChannelInModifier);
             else
-                value = (int32_t)((float)ko.value(DPT_Value_Amplitude) * ParamMTR_ChannelInModifier);
+                scaled = llround((float)ko.value(DPT_Value_Amplitude) * ParamMTR_ChannelInModifier);
 
-            diff = ((int32_t)value - (int32_t)_reference);
-            _reference = (int32_t)value;
-            logTraceP("New reference %i (diff %i)", _reference, diff);
+            value = (uint32_t)scaled;
+            diff = (int64_t)(int32_t)value - (int64_t)(int32_t)_reference;
+            _reference = value;
+            logTraceP("New reference %i (diff %s%u)", (int32_t)_reference, diff < 0 ? "-" : "", (uint32_t)llabs(diff));
         }
 
         if (diff == 0) return;
@@ -193,10 +205,10 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
         }
 
         if (ParamMTR_ChannelBackstop && diff < 0) return;
-        if (ParamMTR_ChannelInDistance > 0 && ParamMTR_ChannelInDistance < abs(diff)) return;
+        if (ParamMTR_ChannelInDistance > 0 && ParamMTR_ChannelInDistance < llabs(diff)) return;
         if (value == 0 && ParamMTR_ChannelIgnoreZero) return;
 
-        logTraceP("Add counter diff %i", diff);
+        logTraceP("Add counter diff %s%u", diff < 0 ? "-" : "", (uint32_t)llabs(diff));
 
         if (counterTypeSigned())
         {
