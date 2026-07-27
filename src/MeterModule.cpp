@@ -235,6 +235,7 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
         case 2:
         {
             uint8_t channel = data[1];
+            if (channel >= MTR_ChannelCount || _channels[channel] == nullptr) return false;
 
             _channels[channel]->reset(data[2]);
             openknx.flash.save();
@@ -245,6 +246,8 @@ bool MeterModule::processFunctionProperty(uint8_t objectIndex, uint8_t propertyI
         case 3:
         {
             uint8_t channel = data[1];
+            if (channel >= MTR_ChannelCount || _channels[channel] == nullptr) return false;
+
             if ((bool)data[2] != _channels[channel]->counterTypeSigned())
             {
                 logErrorP("Convertion error! %i", channel);
