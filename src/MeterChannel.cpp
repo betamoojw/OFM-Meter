@@ -203,14 +203,10 @@ void MeterChannel::processInputKoInput(GroupObject &ko)
 
         logTraceP("Add counter diff %s%u", diff < 0 ? "-" : "", (uint32_t)llabs(diff));
 
-        if (counterTypeSigned())
-        {
-            _counter = (int32_t)_counter + diff;
-        }
-        else
-        {
-            _counter += diff;
-        }
+        // Ohne Fallunterscheidung: die Addition im Zweierkomplement liefert dasselbe
+        // Bitmuster, egal ob das Register vorher vorzeichenbehaftet gelesen wird.
+        // counterTypeSigned() entscheidet erst beim Auslesen.
+        _counter += diff;
     }
 
     // Impuls und True
@@ -280,7 +276,9 @@ void MeterChannel::abortPulseCalculate()
 {
     logTraceP("abortPulseCalculate");
     logIndentUp();
-    const uint32_t duration = _lastTime - _startTime;
+    // _lastTime bleibt 0, wenn nach dem ersten Impuls keiner mehr kam. Dann gibt es
+    // keine gemessene Dauer, und die Subtraktion würde unterlaufen.
+    const uint32_t duration = _lastTime ? _lastTime - _startTime : 0;
     processPulseCalculation(0, duration, 0);
     logIndentDown();
     _startTime = 0;
@@ -387,58 +385,30 @@ void MeterChannel::sendOutput(bool send /* = true */)
         // hat gar keine Verengung und braucht es immer.
         const double out = (counterTypeSigned() ? (double)(int32_t)_counter : (double)_counter) * _outModifier;
 
-        // DPT 12.xxx
-        if (ParamMTR_ChannelOutType == 0)
-            if (send)
-                KoMTR_ChannelOutput.value(out, DPT_Value_4_Ucount);
-            else
-                KoMTR_ChannelOutput.valueNoSend(out, DPT_Value_4_Ucount);
+        Dpt dpt = DPT_Value_4_Ucount;                                     // DPT 12.xxx
+        if (ParamMTR_ChannelOutType == 1) dpt = DPT_Value_4_Count;        // DPT 13.xxx
+        else if (ParamMTR_ChannelOutType == 2) dpt = DPT_Value_Amplitude; // DPT 14.xxx
 
-        // DPT 13.xxx
-        else if (ParamMTR_ChannelOutType == 1)
-            if (send)
-                KoMTR_ChannelOutput.value(out, DPT_Value_4_Count);
-            else
-                KoMTR_ChannelOutput.valueNoSend(out, DPT_Value_4_Count);
-
-        // DPT 14.xxx
-        else if (ParamMTR_ChannelOutType == 2)
-        {
-            if (send)
-                KoMTR_ChannelOutput.value(out, DPT_Value_Amplitude);
-            else
-                KoMTR_ChannelOutput.valueNoSend(out, DPT_Value_Amplitude);
-        }
+        if (send)
+            KoMTR_ChannelOutput.value(out, dpt);
+        else
+            KoMTR_ChannelOutput.valueNoSend(out, dpt);
     }
     else if (ParamMTR_ChannelMode == 3)
     {
-        // DPT 7.7
-        if (ParamMTR_ChannelDurationType == 0)
-            if (send)
-                KoMTR_ChannelOutput.value(_counter / 3600, DPT_TimePeriodHrs);
-            else
-                KoMTR_ChannelOutput.valueNoSend(_counter / 3600, DPT_TimePeriodHrs);
+        // _counter zählt Sekunden. DurationType 0 und 1 geben Stunden aus, 2 Minuten,
+        // 3 Sekunden; nur 0 nutzt dafür DPT 7.7, die übrigen DPT 12.
+        uint32_t divisor = 1;
+        if (ParamMTR_ChannelDurationType <= 1) divisor = 3600;
+        else if (ParamMTR_ChannelDurationType == 2) divisor = 60;
 
-        // DPT 12.102
-        else if (ParamMTR_ChannelDurationType == 1)
-            if (send)
-                KoMTR_ChannelOutput.value(_counter / 3600, DPT_Value_4_Ucount);
-            else
-                KoMTR_ChannelOutput.valueNoSend(_counter / 3600, DPT_Value_4_Ucount);
+        const Dpt dpt = (ParamMTR_ChannelDurationType == 0) ? DPT_TimePeriodHrs : DPT_Value_4_Ucount;
+        const uint32_t out = _counter / divisor;
 
-        // DPT 12.101
-        else if (ParamMTR_ChannelDurationType == 2)
-            if (send)
-                KoMTR_ChannelOutput.value(_counter / 60, DPT_Value_4_Ucount);
-            else
-                KoMTR_ChannelOutput.valueNoSend(_counter / 60, DPT_Value_4_Ucount);
-
-        // DPT 12.100
-        else if (ParamMTR_ChannelDurationType == 3)
-            if (send)
-                KoMTR_ChannelOutput.value(_counter, DPT_Value_4_Ucount);
-            else
-                KoMTR_ChannelOutput.valueNoSend(_counter, DPT_Value_4_Ucount);
+        if (send)
+            KoMTR_ChannelOutput.value(out, dpt);
+        else
+            KoMTR_ChannelOutput.valueNoSend(out, dpt);
     }
 }
 
