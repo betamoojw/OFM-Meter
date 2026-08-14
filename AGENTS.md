@@ -47,6 +47,22 @@ gerundet.
   Zählerstand bzw. Referenzwert vorzeichenbehaftet interpretiert
   werden.
 
+## Webseite (`/meter`)
+
+Unter `#if defined(OPENKNX_WEBSERVER) && (defined(KNX_IP_LAN) || defined(KNX_IP_WIFI))`
+registriert `MeterModule::setup()` Menüpunkt und Route `/meter` — eine
+read-only Kanaltabelle (Modus, interner Zählerstand, Referenzzähler),
+gebaut direkt im Route-Lambda.
+
+- Registriert wird nur bei `knx.configured()`, und das Lambda prüft es
+  erneut: die Route bleibt registriert, wenn die Konfiguration zur
+  Laufzeit wegfällt, und antwortet dann mit 404 statt auf ungültige
+  Kanaldaten zuzugreifen.
+- Vorzeichen folgen `counterTypeSigned()`/`referenceTypeSigned()` — die
+  Anzeige muss dieselbe Interpretation nutzen wie der Sendepfad.
+- Neue Modi brauchen einen Zweig im `switch (ch->mode())` der Seite,
+  sonst steht dort `—`.
+
 ## Regeln für Weiterentwicklung
 
 1. Neue Modi bekommen eine eigene Nummer in `_mode` und eigene
